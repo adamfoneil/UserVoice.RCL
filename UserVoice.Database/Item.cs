@@ -1,8 +1,7 @@
 ﻿using AO.Models;
-using AO.Models.Enums;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
@@ -49,6 +48,6 @@ namespace UserVoice.Database
             [Role.ProductOwner] = new[] { ItemType.Feature, ItemType.TestCase, ItemType.Impediment },            
             [Role.User] = new[] { ItemType.Feature, ItemType.Impediment },
             [Role.SignOffUser] = new[] { ItemType.Feature, ItemType.Impediment, ItemType.TestCase }
-        };
+        };        
     }
 }

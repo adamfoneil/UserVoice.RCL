@@ -1,7 +1,10 @@
-﻿using Dapper.Repository.SqlServer;
+﻿using Dapper;
+using Dapper.Repository.SqlServer;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using System.Reflection;
 using UserVoice.Database;
+using UserVoice.Service.Extensions;
 using UserVoice.Service.Repositories;
 
 namespace UserVoice.Service
@@ -31,6 +34,24 @@ namespace UserVoice.Service
         public async Task MergeUsersAsync(IEnumerable<User> users)
         {
             foreach (var user in users) await Users.MergeAsync(user);            
+        }
+
+        public async Task CreateSchemaIfNotExistsAsync()
+        {
+            using var cn = GetConnection();
+            if (!await cn.SchemaExistsAsync("uservoice"))
+            {
+                var script = GetResource("Resources.DbSchema.sql");
+                var commands = script.Split("GO\rn");
+                foreach (var cmd in commands) await cn.ExecuteAsync(cmd);
+            }
+        }
+
+        private string GetResource(string name)
+        {
+            var a = Assembly.GetExecutingAssembly();
+            using var stream = a.GetManifestResourceStream(name) ?? throw new ApplicationException($"Stream name {name} was not found");
+            return new StreamReader(stream).ReadToEnd();
         }
     }
 }

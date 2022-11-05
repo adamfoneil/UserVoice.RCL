@@ -1,0 +1,50 @@
+﻿@inject UserVoiceDataContext Data
+
+<div class="d-flex justify-content-center my-2">
+    @foreach (var typeGrp in items.GroupBy(row => row.Type))
+    {
+        <div class="mx-3">
+            <RadzenButton Icon="@TypeInfo[typeGrp.Key].Icon" Text="@TypeInfo[typeGrp.Key].Text" Click="@(() => ApplyFilter(typeGrp.Key))" ButtonStyle="ButtonStyle.Secondary"/>
+        </div>
+    }
+</div>
+
+<hr/>
+
+<RadzenDataList Data="@items">
+    <Template Context="row">
+        <RadzenCard class="mb-1">
+            <div class="d-flex">
+                <div class="text-muted">
+                    #@(row.Id)
+                </div>
+
+                <div>
+                    @row.Title
+                </div>
+            </div>
+        </RadzenCard>
+    </Template>
+</RadzenDataList>
+
+@code {
+    ItemType filterType;
+    IEnumerable<Item> items = Enumerable.Empty<Item>();
+
+    Dictionary<ItemType, (string Icon, string Color, string Text)> TypeInfo = new()
+    {
+        [ItemType.Impediment] = ("stop", "maroon", "Impediments"),
+        [ItemType.Feature] = ("lightbulb", "darkgreen", "Features"),
+        [ItemType.TestCase] = ("science", "purple", "Test Cases")
+    };
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+
+    async Task ApplyFilter(ItemType itemType)
+    {
+        filterType = itemType;
+    }
+}
