@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserVoice.RCL", "UserVoice.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserVoice.Database", "UserVoice.Database\UserVoice.Database.csproj", "{241366F7-F33B-4274-B729-FB93C3FD91C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserVoice.Service", "UserVoice.Service\UserVoice.Service.csproj", "{DB1AA86B-BC3E-4C57-891F-3F9D0983C611}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{241366F7-F33B-4274-B729-FB93C3FD91C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{241366F7-F33B-4274-B729-FB93C3FD91C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{241366F7-F33B-4274-B729-FB93C3FD91C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB1AA86B-BC3E-4C57-891F-3F9D0983C611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB1AA86B-BC3E-4C57-891F-3F9D0983C611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB1AA86B-BC3E-4C57-891F-3F9D0983C611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB1AA86B-BC3E-4C57-891F-3F9D0983C611}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

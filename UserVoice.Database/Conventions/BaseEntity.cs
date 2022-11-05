@@ -1,9 +1,12 @@
-﻿using System;
+﻿using AO.Models;
+using AO.Models.Interfaces;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserVoice.Database.Conventions
 {
-    public class BaseEntity
+    [Schema("uservoice")]
+    public abstract class BaseEntity : IModel<int>
     {
         public int Id { get; set; }
 

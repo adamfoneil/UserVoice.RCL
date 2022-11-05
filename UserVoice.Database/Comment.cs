@@ -1,9 +1,10 @@
 ﻿using AO.Models;
+using System.ComponentModel.DataAnnotations;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
 {
-    public enum CommentType
+    public enum ItemStatus
     {
         /// <summary>
         /// requested feature was implemented
@@ -28,8 +29,14 @@ namespace UserVoice.Database
         [References(typeof(Item))]
         public int ItemId { get; set; }
 
-        public CommentType? Type { get; set; }
+        /// <summary>
+        /// only ProductOwner users may select an item status
+        /// </summary>
+        public ItemStatus? ItemStatus { get; set; }
 
+        [Required]
         public string Body { get; set; }
+
+        public static bool AllowStatus(Role role) => role == Role.ProductOwner;
     }
 }

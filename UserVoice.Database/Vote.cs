@@ -4,7 +4,10 @@ using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
 {
-    public class FeatureVote : BaseEntity
+    /// <summary>
+    /// captures user sentiment on item (typically a feature request or impediment)
+    /// </summary>
+    public class Vote : BaseEntity
     {
         [Key]
         [ForeignKey(nameof(Item))]
@@ -16,7 +19,7 @@ namespace UserVoice.Database
 
         /// <summary>
         /// converted to int (+1 or -1) with
-        /// ABS([Upvoted]*-1)
+        /// ([Upvoted]*2) - 1
         /// </summary>
         public bool Upvoted { get; set; }
     }

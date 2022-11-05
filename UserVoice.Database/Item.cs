@@ -1,23 +1,40 @@
 ﻿using AO.Models;
 using AO.Models.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
 {
+    public enum ItemType
+    {
+        /// <summary>
+        /// documents anything that hurts my productivity as a user (bug, deficiency), can be voted on
+        /// </summary>
+        Impediment,
+        /// <summary>
+        /// describes some new functionality I'd like to see that can be voted on by the community
+        /// </summary>
+        Feature,
+        /// <summary>
+        /// describes functionality seeking end-user sign off as part of a release
+        /// </summary>
+        TestCase
+    }
+
     public class Item : BaseEntity
     {
+        public ItemType Type { get; set; } 
+
         [Required]
         [MaxLength(255)]        
         public string Title { get; set; }
 
         public string Body { get; set; }
 
-        /// <summary>
-        /// most recent comment type
-        /// </summary>
-        [SaveAction(SaveAction.None)]
-        public CommentType? CommentType { get; set; }
+        [References(typeof(Comment))]
+        public int? StatusCommentId { get; set; }
 
         /// <summary>
         /// true means the item is visible to everyone.
@@ -26,5 +43,12 @@ namespace UserVoice.Database
         /// - feedback acted upon, a feature implemented, and therefore not open for voting
         /// </summary>
         public bool IsActive { get; set; } = true;
+
+        public static Dictionary<Role, IEnumerable<ItemType>> AllowedTypes => new Dictionary<Role, IEnumerable<ItemType>>()
+        {
+            [Role.ProductOwner] = new[] { ItemType.Feature, ItemType.TestCase, ItemType.Impediment },            
+            [Role.User] = new[] { ItemType.Feature, ItemType.Impediment },
+            [Role.SignOffUser] = new[] { ItemType.Feature, ItemType.Impediment, ItemType.TestCase }
+        };
     }
 }

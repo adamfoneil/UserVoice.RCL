@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AO.Models;
+using AO.Models.Extensions;
+using System;
+using System.ComponentModel.DataAnnotations;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
@@ -6,30 +9,40 @@ namespace UserVoice.Database
     public enum Role
     {
         /// <summary>
-        /// can make requests, vote on features, post comments (bot not select type)
+        /// can make requests, vote on features, post comments (bot not select status)
         /// </summary>
         User,
         /// <summary>
-        /// developer or product rep who can post comments and select the type
+        /// developer or product rep who can post comments with a status selected,
+        /// can add work item links
         /// </summary>
         ProductOwner,
         /// <summary>
-        /// someone who by default signs off on UAT items
+        /// may submit test items and reply to acceptance requests
         /// </summary>
         SignOffUser
     }
 
     /// <summary>
     /// users will be imported from the host application and periodically synced
-    /// </summary>
+    /// </summary>    
+    [UniqueConstraint(nameof(Email))]
     public class User : BaseEntity
     {
+        [Key]
         [MaxLength(50)]
-        public string Name { get; set; } = default!;
+        public string Name { get; set; }
 
         [MaxLength(50)]
-        public string Email { get; set; } = default!;
+        public string Email { get; set; }
 
         public Role Role { get; set; }
+
+        [MaxLength(50)]
+        public string TimeZoneId { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        public DateTime LocalTime => Timestamp.Local(TimeZoneId);
     }
 }

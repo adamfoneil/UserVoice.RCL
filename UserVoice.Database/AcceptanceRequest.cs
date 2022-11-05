@@ -29,6 +29,9 @@ namespace UserVoice.Database
         [References(typeof(Item))]
         public int ItemId { get; set; }
 
+        /// <summary>
+        /// must be a user who allows acceptance testing
+        /// </summary>
         [Key]
         [References(typeof(User))]
         public int UserId { get; set; }
