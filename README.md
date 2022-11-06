@@ -7,3 +7,18 @@ The reason for all this is when you have a large or large-ish application that r
 There's a similar need for capturing bug reports and feedback on impediments and feature requests. I'm already using [Usersnap](https://usersnap.com/) for this, which is a great tool. But it doesn't help me with the UAT side of this -- where I'd like to be able to enter test cases that select users sign off on. (I may end up adding some API integration with Usersnap in order to import feedback from there -- not sure.)
 
 I know there's a Microsoft product called "UserVoice" or there was at one time. I named this pretty hastily. Naming can be tough as you know, and I don't love the idea of copying an existing product, so I'm already considering different names for this. But since renaming solution assets can be annoying in Visual Studio, the name "UserVoice" will likely stick for now.
+
+# Database Setup
+Run this [sql script](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Service/Resources/DbSchema.sql) to create the required database tables.
+You'll also need to add a few `GRANTs` in your database due to the `uservoice` schema being added:
+<details>
+  <summary>script</summary>
+  
+  ```sql
+  GRANT SELECT ON SCHEMA ::[uservoice] TO *your app user account*
+  GRANT INSERT ON SCHEMA ::[uservoice] TO *your app user account*
+  GRANT UPDATE ON SCHEMA ::[uservoice] TO *your app user account*
+  GRANT DELETE ON SCHEMA ::[uservoice] TO *your app user account*
+  ```
+  
+</details>
