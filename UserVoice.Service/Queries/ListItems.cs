@@ -62,17 +62,20 @@ namespace UserVoice.Service.Queries
             FROM 
                 [votes] [i]
             ORDER BY 
-                {sort}")
+                {orderBy}")
         {
         }
 
         [Where("[i].[IsActive]=@isActive")]
         public bool? IsActive { get; set; } = true;
 
+        [Where("[i].[Type]=@type")]
+        public ItemType? Type { get; set; }
+
         [OrderBy(ListItemsSortOptions.LatestModifedOrAdded, "COALESCE([i].[DateModified], [i].[DateCreated]) DESC")]
         [OrderBy(ListItemsSortOptions.LatestStatusChange, "[StatusDate] DESC")]
         [OrderBy(ListItemsSortOptions.MostVotes, "[TotalVotes] DESC")]
         [OrderBy(ListItemsSortOptions.MostUpvoted, "[TotalUpvotes] DESC")]
-        public ListItemsSortOptions Sort { get; set; }
+        public ListItemsSortOptions Sort { get; set; } = ListItemsSortOptions.LatestModifedOrAdded;
     }
 }

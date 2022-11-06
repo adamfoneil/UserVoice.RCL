@@ -58,23 +58,25 @@ namespace UserVoice.Service
 
         public Dictionary<ItemType, ItemTypeInfo> TypeInfo = new()
         {
-            [ItemType.Issue] = new("stop", "color:maroon", "Issue"),
-            [ItemType.FeatureIdea] = new("lightbulb", "color:darkgreen", "Feature/Idea"),
-            [ItemType.TestCase] = new("science", "color:#cc33ff", "Test Case")
+            [ItemType.Issue] = new("stop", "color:maroon", "Issue", "Issues"),
+            [ItemType.FeatureIdea] = new("lightbulb", "color:darkgreen", "Feature/Idea", "Features/Ideas"),
+            [ItemType.TestCase] = new("science", "color:#cc33ff", "Test Case", "Test Cases")
         };
 
         public struct ItemTypeInfo
         {
-            public ItemTypeInfo(string icon, string style, string text)
+            public ItemTypeInfo(string icon, string style, string singularText, string pluralText)
             {
                 Icon = icon;
                 Style = style;
-                Text = text;
+                SingularText = singularText;
+                PluralText = pluralText;
             }
 
             public string Icon { get; init; }
             public string Style { get; init; }
-            public string Text { get; init; }
+            public string SingularText { get; init; }
+            public string PluralText { get; init; }
         }
     }
 }

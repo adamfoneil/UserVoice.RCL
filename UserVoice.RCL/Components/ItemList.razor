@@ -4,40 +4,52 @@
     @foreach (var typeGrp in items.GroupBy(row => row.Type))
     {
         <div class="mx-3">
-            <RadzenButton Icon="@Data.TypeInfo[typeGrp.Key].Icon" Text="@Data.TypeInfo[typeGrp.Key].Text" Click="@(() => ApplyFilter(typeGrp.Key))" ButtonStyle="ButtonStyle.Secondary"/>
+            <RadzenButton Icon="@Data.TypeInfo[typeGrp.Key].Icon" Text="@Data.TypeInfo[typeGrp.Key].PluralText" Click="@(() => ApplyFilter(typeGrp.Key))" ButtonStyle="ButtonStyle.Secondary"/>
         </div>
+    }
+    @if (query.Type.HasValue)
+    {
+        <div class="mx-3">
+            <RadzenButton Text="Show All" Click="@(async () => { query.Type = null; await Refresh(); })"/>
+        </div>
+
     }
 </div>
 
 <hr/>
 
 <RadzenDataList Data="@items">
-    <Template Context="row">
-        <RadzenCard class="mb-1">
-            <div class="d-flex">
-                <div class="text-muted">
-                    #@(row.Id)
-                </div>
-
-                <div>
-                    @row.Title
-                </div>
+    <Template Context="row">        
+        <div class="d-flex">
+            <div class="text-muted">
+                #@(row.Id)
             </div>
-        </RadzenCard>
+
+            <div>
+                @row.Title
+            </div>
+        </div>        
     </Template>
 </RadzenDataList>
 
 @code {
-    ItemType filterType;
-    IEnumerable<Item> items = Enumerable.Empty<Item>();    
+    ListItems query = new();
+    IEnumerable<ListItemsResult> items = Enumerable.Empty<ListItemsResult>();    
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        return base.OnInitializedAsync();
+        await Refresh();
+    }
+
+    async Task Refresh()
+    {
+        items = await query.ExecuteAsync(Data.GetConnection);
+        StateHasChanged();
     }
 
     async Task ApplyFilter(ItemType itemType)
     {
-        filterType = itemType;
+        query.Type = itemType;
+        await Refresh();
     }
 }
