@@ -4,11 +4,11 @@
     <DataAnnotationsValidator/>
 
     <div class="d-flex mb-2">
-        <div class="col-2">            
+        <div class="col-2 me-1">            
             <RadzenDropDown Data="@(Dropdown.FromEnum<ItemType>())" TValue="ItemType" ValueProperty="Key" TextProperty="Value" @bind-Value="@item.Type" class="w-100">
                 <Template Context="item">
                     <div class="d-flex align-items-center">
-                        <RadzenIcon Icon="@Data.TypeInfo[item.Key].Icon" class="mr-2" Style="@Data.TypeInfo[item.Key].Style" />
+                        <RadzenIcon Icon="@Data.TypeInfo[item.Key].Icon" class="me-2" Style="@Data.TypeInfo[item.Key].Style" />
                         <span>@Data.TypeInfo[item.Key].SingularText</span>
                     </div>                    
                 </Template>
@@ -16,7 +16,7 @@
             <ValidationMessage For="@(() => item.Type)" />
         </div>
 
-        <div class="col-10">
+        <div class="col-10 ms-1">
             <RadzenTextBox @bind-Value="@item.Title" MaxLength="255" class="w-100 pl-1" Placeholder="Title" />
             <ValidationMessage For="@(() => item.Title)" />            
         </div>

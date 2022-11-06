@@ -12,7 +12,6 @@
         <div class="mx-3">
             <RadzenButton Text="Show All" Click="@(async () => { query.Type = null; await Refresh(); })"/>
         </div>
-
     }
 </div>
 
@@ -21,11 +20,11 @@
 <RadzenDataList Data="@items">
     <Template Context="row">        
         <div class="d-flex">
-            <div class="text-muted">
+            <div class="text-muted me-1">
                 #@(row.Id)
             </div>
 
-            <div>
+            <div class="ms-1">
                 @row.Title
             </div>
         </div>        
