@@ -40,7 +40,7 @@
         await Refresh();
     }
 
-    async Task Refresh()
+    public async Task Refresh()
     {
         items = await query.ExecuteAsync(Data.GetConnection);
         StateHasChanged();

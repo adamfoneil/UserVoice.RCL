@@ -3,13 +3,14 @@
 <PageTitle>Index</PageTitle>
 
 <div class="container">
-    <ItemList/>
+    <ItemList @ref="list"/>
 
-    <ItemForm CurrentUser="@user" />
+    <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
 </div>
 
 @code {
     Database.User user = new();
+    ItemList? list;
 
     protected override void OnInitialized()
     {
@@ -18,5 +19,10 @@
             Name = "adamo",
             Email = "adamosoftware@gmail.com"
         };
+    }
+
+    async Task OnItemSaved(Database.Item item)
+    {
+        await list?.Refresh();
     }
 }
