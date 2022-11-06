@@ -1,13 +1,30 @@
 ﻿@inject UserVoiceDataContext Data
 
 <EditForm Model="@item" OnSubmit="OnSubmit">
-    <FormField Label="Type:">
-        <EnumDropDown @bind-Value="@item.Type" TEnum="ItemType"/>        
+    <DataAnnotationsValidator/>
+
+    <FormField Label="Type:" class="mb-2">
+        <EnumDropDown @bind-Value="@item.Type" TEnum="ItemType"/>
+        <ValidationMessage For="@(() => item.Type)"/>
     </FormField>
+
+    <FormField Label="Title:" class="mb-2">
+        <RadzenTextBox @bind-Value="@item.Title" MaxLength="255" class="w-100"/>
+        <ValidationMessage For="@(() => item.Title)" />
+    </FormField>
+
+    <div>
+        <ValidationMessage For="@(() => item.Body)" />
+        <RadzenTextArea @bind-Value="@item.Body" Style="min-height:200px" class="w-100"/>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-secondary">Save</button>
+    </div>
 </EditForm>
 
 @code {
-    Item item = new();
+    Item item = DefaultItem();
 
     [Parameter]
     public User? CurrentUser { get; set; }
@@ -17,9 +34,13 @@
 
     async Task OnSubmit(EditContext editContext)
     {
-        Data.User = CurrentUser ?? throw new ApplicationException("CurrentUser is required");
+        if (!editContext.Validate()) return;        
 
+        Data.User = CurrentUser ?? throw new ApplicationException("CurrentUser is required");
         await Data.Items.SaveAsync(item);
         await ItemSaved.InvokeAsync(item);
+        item = DefaultItem();                
     }
+
+    static Item DefaultItem() => new Item() { Type = ItemType.Impediment };
 }

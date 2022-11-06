@@ -1,7 +1,6 @@
 ﻿using AO.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
@@ -11,25 +10,27 @@ namespace UserVoice.Database
         /// <summary>
         /// documents anything that hurts my productivity as a user (bug, deficiency), can be voted on
         /// </summary>
-        Impediment,
+        Impediment = 1,
         /// <summary>
         /// describes some new functionality I'd like to see that can be voted on by the community
         /// </summary>
-        Feature,
+        Feature = 2,
         /// <summary>
         /// describes functionality seeking end-user sign off as part of a release
         /// </summary>
-        TestCase
+        TestCase = 3
     }
 
     public class Item : BaseEntity
     {
-        public ItemType Type { get; set; } 
+        [Required]
+        public ItemType Type { get; set; }
 
         [Required]
         [MaxLength(255)]        
         public string Title { get; set; }
 
+        [Required]
         public string Body { get; set; }
 
         [References(typeof(Comment))]

@@ -2,15 +2,15 @@
 {
     internal static class Dropdown
     {
-        internal static Dictionary<int, string> FromEnum<TEnum>() where TEnum : struct, Enum
+        internal static Dictionary<TEnum, string> FromEnum<TEnum>() where TEnum : struct, Enum
         {
-            var result = new Dictionary<int, string>();
+            var result = new Dictionary<TEnum, string>();
             var values = Enum.GetValues<TEnum>();
 
             foreach (var item in values)
             {
                 var name = Enum.GetName(item);
-                result.Add(Convert.ToInt32(item), FormatEnumName(name));
+                result.Add(item, FormatEnumName(name));
             }
 
             return result;

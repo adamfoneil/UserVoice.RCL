@@ -14,7 +14,7 @@ namespace UserVoice.Database.Conventions
 
         [MaxLength(50)]
         [Required]
-        public string CreatedBy { get; set; }
+        public string CreatedBy { get; set; } = "_notset"; // filled in by BaseRepository.BeforeSaveAsync
 
         public DateTime? DateModified { get; set; }
 

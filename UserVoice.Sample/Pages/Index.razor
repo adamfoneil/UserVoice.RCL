@@ -2,4 +2,17 @@
 
 <PageTitle>Index</PageTitle>
 
-<ItemForm/>
+<ItemForm CurrentUser="@user"/>
+
+@code {
+    Database.User user = new();
+
+    protected override void OnInitialized()
+    {
+        user = new Database.User()
+        {
+            Name = "adamo",
+            Email = "adamosoftware@gmail.com"
+        };
+    }
+}
