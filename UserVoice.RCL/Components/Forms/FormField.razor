@@ -1,0 +1,21 @@
+﻿<div class="form-group row">
+    <div class="col-sm-@LabelColumns">
+        <label class="col-form-label">            
+            @Label
+        </label>        
+    </div>
+    <div class="col-sm-@((12 - LabelColumns) == 0 ? 12 : (12 - LabelColumns))">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int LabelColumns { get; set; } = 2;
+
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

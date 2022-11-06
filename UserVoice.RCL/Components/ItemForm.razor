@@ -1,0 +1,25 @@
+﻿@inject UserVoiceDataContext Data
+
+<EditForm Model="@item" OnSubmit="OnSubmit">
+    <FormField Label="Type:">
+        <EnumDropDown @bind-Value="@item.Type" TEnum="ItemType"/>        
+    </FormField>
+</EditForm>
+
+@code {
+    Item item = new();
+
+    [Parameter]
+    public User? CurrentUser { get; set; }
+
+    [Parameter]
+    public EventCallback<Item> ItemSaved { get; set; }
+
+    async Task OnSubmit(EditContext editContext)
+    {
+        Data.User = CurrentUser ?? throw new ApplicationException("CurrentUser is required");
+
+        await Data.Items.SaveAsync(item);
+        await ItemSaved.InvokeAsync(item);
+    }
+}

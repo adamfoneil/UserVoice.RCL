@@ -1,17 +1,19 @@
 ﻿using Dapper;
 using Dapper.Repository.SqlServer;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Data;
 using System.Reflection;
 using UserVoice.Database;
 using UserVoice.Service.Extensions;
+using UserVoice.Service.Models;
 using UserVoice.Service.Repositories;
 
 namespace UserVoice.Service
 {
     public class UserVoiceDataContext : SqlServerContext<User>
     {
-        public UserVoiceDataContext(string connectionString, ILogger<UserVoiceDataContext> logger) : base(connectionString, logger)
+        public UserVoiceDataContext(IOptions<ConnectionStrings> options, ILogger<UserVoiceDataContext> logger) : base(options.Value.UserVoice, logger)
         {
         }
 

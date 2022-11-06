@@ -1,0 +1,21 @@
+﻿@typeparam TEnum where TEnum : struct, Enum
+
+<RadzenDropDown Data="@(Dropdown.FromEnum<TEnum>())" ValueProperty="Key" TextProperty="Value" TValue="int?" Change="OnChange" />
+
+@code {
+    [Parameter]
+    public TEnum Value { get; set; }
+
+    [Parameter]
+    public EventCallback<TEnum> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<TEnum> OnChanged { get; set; }
+
+    async Task OnChange(object selectedValue)
+    {
+        Value = (TEnum)selectedValue;
+        await ValueChanged.InvokeAsync(Value);
+        await OnChanged.InvokeAsync(Value);
+    }
+}
