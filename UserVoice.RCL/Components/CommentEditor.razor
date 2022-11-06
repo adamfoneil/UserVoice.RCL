@@ -1,4 +1,6 @@
-﻿@inject UserVoiceDataContext Data
+﻿@using CopyObjectLibrary
+@inject UserVoiceDataContext Data
+@using Dapper.QX.Extensions
 
 <ul class="list-group">
     @foreach (var comment in Comments)
@@ -67,6 +69,15 @@
     [Parameter]
     public IEnumerable<Comment> Comments { get; set; } = Enumerable.Empty<Comment>();
 
+    async Task Refresh()
+    {
+        Comments = await new ListComments()
+        {
+            ItemIds = new[] { ItemId }.ToDataTable()
+        }.ExecuteAsync(Data.GetConnection);
+        StateHasChanged();
+    }
+
     [Parameter]
     public EventCallback<Comment> CommentSaved { get; set; }
 
@@ -79,10 +90,12 @@
         Data.User = CurrentUser ?? throw new ApplicationException("CurrentUser is required");
         comment.ItemId = ItemId;
         await Data.Comments.SaveAsync(comment);
-        await CommentSaved.InvokeAsync(comment);
+        await CommentSaved.InvokeAsync(comment);        
+
         comment = new();
 
-        spinner?.Hide();
+        await Refresh();
 
+        spinner?.Hide();
     }
 }
