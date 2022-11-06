@@ -21,8 +21,11 @@
         <div class="d-flex justify-content-between">
             <div class="d-flex align-items-center" style="cursor:pointer" @onclick="@(() => ToggleSection(row.Id))">
                 <div class="text-muted d-flex align-items-center">
-                    <RadzenIcon Icon="@Data.TypeInfo[row.Type].Icon" class="mr-1 me-2" Style="@Data.TypeInfo[row.Type].Style"/>
-                    #@(row.Id)
+                    <RadzenIcon Icon="@Data.TypeInfo[row.Type].Icon" class="mr-1 me-2" Style="@Data.TypeInfo[row.Type].Style"/>                    
+                    @{
+                        var itemText = $"#{row.Id}";
+                    }
+                    <ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" @bind-Value="@expand[row.Id]" Text="@itemText" />
                 </div>
 
                 <div class="ms-2 ml-2">
@@ -31,10 +34,6 @@
 
                 <div class="ms-2 ml-2 text-muted small" title="@row.DateInfo()">
                     @row.PostDate.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now)
-                </div>
-
-                <div class="ms-2 ml-2">
-                    <ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" @bind-Value="@expand[row.Id]"/>
                 </div>
             </div>
 
@@ -47,8 +46,10 @@
         </div>
         @if (expand[row.Id])
         {
-            <div class="ml-4 ms-4 mt-2">
-                @row.Body
+            <div class="ml-5 ms-5 mt-2">
+                <RadzenCard>
+                    @row.Body    
+                </RadzenCard>                
             </div>            
             <div>
                 <CommentEditor Comments="@comments[row.Id]" ItemId="@row.Id" CurrentUser="@CurrentUser" CommentSaved="OnCommentSaved"/>

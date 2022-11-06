@@ -1,8 +1,11 @@
-﻿<RadzenButton Icon="@Icon" Click="OnClick" ButtonStyle="ButtonStyle.Light"/>
+﻿<RadzenButton Icon="@Icon" Click="OnClick" ButtonStyle="ButtonStyle.Light" Text="@Text"/>
 
 @code {
     [Parameter]
     public bool Value { get; set; }
+
+    [Parameter]
+    public string? Text { get; set; }
 
     [Parameter]
     public EventCallback<bool> ValueChanged { get; set; }
