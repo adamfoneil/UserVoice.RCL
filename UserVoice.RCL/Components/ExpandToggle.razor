@@ -1,0 +1,21 @@
+﻿<RadzenButton Icon="@Icon" Click="OnClick" ButtonStyle="ButtonStyle.Light"/>
+
+@code {
+    [Parameter]
+    public bool Value { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnToggled { get; set; }
+
+    string Icon => (Value) ? "expand_less" : "expand_more";
+
+    async Task OnClick()
+    {
+        Value = !Value;
+        await ValueChanged.InvokeAsync(Value);
+        await OnToggled.InvokeAsync(Value);
+    }
+}

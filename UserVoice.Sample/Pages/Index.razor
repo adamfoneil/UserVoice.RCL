@@ -4,7 +4,6 @@
 
 <div class="container">
     <ItemList @ref="list"/>
-
     <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
 </div>
 
@@ -17,12 +16,13 @@
         user = new Database.User()
         {
             Name = "adamo",
-            Email = "adamosoftware@gmail.com"
+            Email = "adamosoftware@gmail.com",
+            TimeZoneId = "Eastern Standard Time"
         };
     }
 
     async Task OnItemSaved(Database.Item item)
     {
-        await list?.Refresh();
+        await list.Refresh();
     }
 }

@@ -4,7 +4,7 @@
     @foreach (var typeGrp in items.GroupBy(row => row.Type))
     {
         <div class="mx-3">
-            <RadzenButton Icon="@Data.TypeInfo[typeGrp.Key].Icon" Text="@Data.TypeInfo[typeGrp.Key].PluralText" Click="@(() => ApplyFilter(typeGrp.Key))" ButtonStyle="ButtonStyle.Secondary"/>
+            <RadzenButton Icon="@Data.TypeInfo[typeGrp.Key].Icon" Text="@Data.TypeInfo[typeGrp.Key].PluralTextWithCount(typeGrp.Count())" Click="@(() => ApplyFilter(typeGrp.Key))" ButtonStyle="ButtonStyle.Secondary"/>
         </div>
     }
     @if (query.Type.HasValue)
@@ -15,25 +15,48 @@
     }
 </div>
 
-<hr/>
-
 <RadzenDataList Data="@items">
     <Template Context="row">        
-        <div class="d-flex">
-            <div class="text-muted me-1">
-                #@(row.Id)
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-center" style="cursor:pointer" @onclick="@(() => ToggleSection(row.Id))">
+                <div class="text-muted d-flex align-items-center">
+                    <RadzenIcon Icon="@Data.TypeInfo[row.Type].Icon" class="mr-1 me-2" Style="@Data.TypeInfo[row.Type].Style"/>
+                    #@(row.Id)
+                </div>
+
+                <div class="ms-2 ml-2">
+                    @row.Title
+                </div>
+
+                <div class="ms-2 ml-2 text-muted small" title="@row.DateInfo()">
+                    @row.PostDate.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now)
+                </div>
+
+                <div class="ms-2 ml-2">
+                    <ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" @bind-Value="@expand[row.Id]"/>
+                </div>
             </div>
 
-            <div class="ms-1">
-                @row.Title
+            <div>
+
+            </div>            
+        </div>
+        @if (expand[row.Id])
+        {
+            <div class="ml-4 ms-4 mt-2">
+                @row.Body
             </div>
-        </div>        
+        }
     </Template>
 </RadzenDataList>
 
 @code {
     ListItems query = new();
-    IEnumerable<ListItemsResult> items = Enumerable.Empty<ListItemsResult>();    
+    IEnumerable<ListItemsResult> items = Enumerable.Empty<ListItemsResult>();
+    Dictionary<int, bool> expand = new();    
+
+    [Parameter]
+    public User? CurrentUser { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,6 +66,7 @@
     public async Task Refresh()
     {
         items = await query.ExecuteAsync(Data.GetConnection);
+        expand = items.ToDictionary(row => row.Id, row => false);
         StateHasChanged();
     }
 
@@ -50,5 +74,17 @@
     {
         query.Type = itemType;
         await Refresh();
+    }
+
+    void ToggleSection(int itemId)
+    {
+        expand[itemId] = !expand[itemId];
+        StateHasChanged();
+    }
+
+    void OnSectionToggled(int rowId, bool expanded)
+    {
+        expand[rowId] = !expanded;
+        StateHasChanged();
     }
 }

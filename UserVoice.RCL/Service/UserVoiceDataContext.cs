@@ -77,6 +77,7 @@ namespace UserVoice.Service
             public string Style { get; init; }
             public string SingularText { get; init; }
             public string PluralText { get; init; }
+            public string PluralTextWithCount(int count) => $"{PluralText} ({count})";
         }
     }
 }

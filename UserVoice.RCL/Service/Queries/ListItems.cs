@@ -30,6 +30,15 @@ namespace UserVoice.Service.Queries
         public int TotalDownvotes { get; set; }
         public int TotalVotes { get; set; }
         public DateTime? StatusDate { get; set; }
+
+        public DateTime PostDate => DateModified ?? DateCreated;
+
+        public string DateInfo()
+        {
+            var result = $"Created {DateCreated:ddd M/d/yy h:mm t}";
+            if (DateModified.HasValue) result += $", modified {DateModified:ddd M/d/yy h:mm t}";
+            return result;
+        }
     }
 
     public class ListItems : Query<ListItemsResult>
