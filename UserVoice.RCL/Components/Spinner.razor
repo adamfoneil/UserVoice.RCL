@@ -1,0 +1,21 @@
+﻿@if (Visible)
+{
+    <img src="_content/UserVoice.RCL/loading.gif" style="width:32px;height:32px" class="mr-2" />
+}
+
+@code {
+    [Parameter]
+    public bool Visible { get; set; }
+
+    public void Show()
+    {
+        Visible = true;
+        StateHasChanged();
+    }
+
+    public void Hide()
+    {
+        Visible = false;
+        StateHasChanged();
+    }
+}

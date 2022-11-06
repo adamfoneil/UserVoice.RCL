@@ -1,6 +1,6 @@
 ﻿@typeparam TEnum where TEnum : struct, Enum
 
-<RadzenDropDown Data="@(Dropdown.FromEnum<TEnum>())" ValueProperty="Key" TextProperty="Value" TValue="TEnum" Value="@Value" Change="OnValueChanged" />
+<RadzenDropDown Data="@(Dropdown.FromEnum<TEnum>())" ValueProperty="Key" TextProperty="Value" TValue="TEnum" Value="@Value" Change="OnValueChanged" class="@Css.GetClass(Parameters)" />
 
 @code {
     [Parameter]
@@ -10,7 +10,10 @@
     public EventCallback<TEnum> ValueChanged { get; set; }
 
     [Parameter]
-    public EventCallback<TEnum> OnChanged { get; set; }
+    public EventCallback<TEnum> OnChanged { get; set; }    
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Parameters { get; set; }
 
     async Task OnValueChanged(object selectedValue)
     {

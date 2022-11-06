@@ -10,11 +10,11 @@ namespace UserVoice.Database
         /// <summary>
         /// documents anything that hurts my productivity as a user (bug, deficiency), can be voted on
         /// </summary>
-        Impediment = 1,
+        Issue = 1,
         /// <summary>
         /// describes some new functionality I'd like to see that can be voted on by the community
         /// </summary>
-        Feature = 2,
+        FeatureIdea = 2,
         /// <summary>
         /// describes functionality seeking end-user sign off as part of a release
         /// </summary>
@@ -46,9 +46,9 @@ namespace UserVoice.Database
 
         public static Dictionary<Role, IEnumerable<ItemType>> AllowedTypes => new Dictionary<Role, IEnumerable<ItemType>>()
         {
-            [Role.ProductOwner] = new[] { ItemType.Feature, ItemType.TestCase, ItemType.Impediment },            
-            [Role.User] = new[] { ItemType.Feature, ItemType.Impediment },
-            [Role.SignOffUser] = new[] { ItemType.Feature, ItemType.Impediment, ItemType.TestCase }
-        };        
+            [Role.ProductOwner] = new[] { ItemType.FeatureIdea, ItemType.TestCase, ItemType.Issue },            
+            [Role.User] = new[] { ItemType.FeatureIdea, ItemType.Issue },
+            [Role.SignOffUser] = new[] { ItemType.FeatureIdea, ItemType.Issue, ItemType.TestCase }
+        };
     }
 }
