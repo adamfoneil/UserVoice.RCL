@@ -24,7 +24,19 @@
   
     <div>
         <ValidationMessage For="@(() => item.Body)" />
-        <RadzenTextArea @bind-Value="@item.Body" Style="min-height:200px" class="w-100"/>
+        <RadzenHtmlEditor @bind-Value="@item.Body" Style="min-height:200px" class="w-100">
+            <RadzenHtmlEditorUndo />
+            <RadzenHtmlEditorRedo />
+            <RadzenHtmlEditorSeparator />
+            <RadzenHtmlEditorBold />
+            <RadzenHtmlEditorItalic />
+            <RadzenHtmlEditorUnderline />
+            <RadzenHtmlEditorStrikeThrough />
+            <RadzenHtmlEditorSeparator />
+            <RadzenHtmlEditorColor />
+            <RadzenHtmlEditorBackground />
+            <RadzenHtmlEditorRemoveFormat />
+        </RadzenHtmlEditor>
     </div>
 
     <div class="d-flex align-items-center">

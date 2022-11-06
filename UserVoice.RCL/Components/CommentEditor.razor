@@ -1,0 +1,88 @@
+﻿@inject UserVoiceDataContext Data
+
+<ul class="list-group">
+    @foreach (var comment in Comments)
+    {
+        <li class="list-group-item">
+            <strong>@comment.CreatedBy</strong>
+            <span class="text-muted ml-2 ms-2">@comment.DateCreated.ElapsedRelative(DateTime.Now)</span>
+            <div>
+                @comment.Body
+            </div>
+        </li>
+    }
+    <li class="list-group-item">
+        <EditForm Model="@comment" OnSubmit="OnSubmit">
+            <DataAnnotationsValidator />
+
+            <ValidationMessage For="@(() => comment.Body)" />
+            <RadzenHtmlEditor @bind-Value="@comment.Body" Style="min-height:100px" class="w-100">
+                <RadzenHtmlEditorUndo />
+                <RadzenHtmlEditorRedo />
+                <RadzenHtmlEditorSeparator />
+                <RadzenHtmlEditorBold />
+                <RadzenHtmlEditorItalic />
+                <RadzenHtmlEditorUnderline />
+                <RadzenHtmlEditorStrikeThrough />
+                <RadzenHtmlEditorSeparator />
+                <RadzenHtmlEditorColor />
+                <RadzenHtmlEditorBackground />
+                <RadzenHtmlEditorRemoveFormat />
+            </RadzenHtmlEditor>
+            
+            <div class="d-flex justify-content-between mt-2">
+                @if (CurrentUser?.Role == Role.ProductOwner)
+                {
+                    <FormField Label="Set Status:" LabelColumns="4">
+                        <RadzenDropDown Data="@(Dropdown.FromEnum<ItemStatus>())" TValue="ItemStatus?" ValueProperty="Key" TextProperty="Value" @bind-Value="@comment.ItemStatus" AllowClear="true">
+                            <Template Context="item">
+                                <div class="d-flex align-items-center">
+                                    <RadzenIcon Icon="@Data.StatusInfo[item.Key].Icon" class="me-2" Style="@Data.StatusInfo[item.Key].Style" />
+                                    <span>@Data.StatusInfo[item.Key].Text</span>
+                                </div>
+                            </Template>
+                        </RadzenDropDown>
+                    </FormField>                    
+                }
+
+                <div class="d-flex align-items-center">
+                    <button type="submit" class="btn btn-secondary">Save</button>
+                    <Spinner @ref="spinner" />
+                </div>
+            </div>            
+        </EditForm>
+    </li>
+</ul>
+
+@code {
+    Comment comment = new();
+    Spinner? spinner;
+
+    [Parameter]
+    public User? CurrentUser { get; set; }
+
+    [Parameter]
+    public int ItemId { get; set; }
+
+    [Parameter]
+    public IEnumerable<Comment> Comments { get; set; } = Enumerable.Empty<Comment>();
+
+    [Parameter]
+    public EventCallback<Comment> CommentSaved { get; set; }
+
+    async Task OnSubmit(EditContext editContext)
+    {
+        if (!editContext.Validate()) return;
+
+        spinner?.Show();
+
+        Data.User = CurrentUser ?? throw new ApplicationException("CurrentUser is required");
+        comment.ItemId = ItemId;
+        await Data.Comments.SaveAsync(comment);
+        await CommentSaved.InvokeAsync(comment);
+        comment = new();
+
+        spinner?.Hide();
+
+    }
+}

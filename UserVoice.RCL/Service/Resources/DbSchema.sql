@@ -95,3 +95,10 @@ GO
 
 ALTER TABLE [uservoice].[Item] ADD CONSTRAINT [FK_uservoiceItem_StatusCommentId] FOREIGN KEY ([StatusCommentId]) REFERENCES [uservoice].[Comment] ([Id])
 
+GO
+
+CREATE TYPE [uservoice].[IdList] AS TABLE (
+    [Id] int NOT NULL PRIMARY KEY
+)
+
+GO

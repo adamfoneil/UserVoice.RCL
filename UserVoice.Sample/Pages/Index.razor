@@ -3,7 +3,7 @@
 <PageTitle>Index</PageTitle>
 
 <div class="container">
-    <ItemList @ref="list"/>
+    <ItemList @ref="list" CurrentUser="@user"/>
     <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
 </div>
 
@@ -17,7 +17,8 @@
         {
             Name = "adamo",
             Email = "adamosoftware@gmail.com",
-            TimeZoneId = "Eastern Standard Time"
+            TimeZoneId = "Eastern Daylight Time",
+            Role = Database.Role.ProductOwner
         };
     }
 

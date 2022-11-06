@@ -28,7 +28,7 @@ namespace UserVoice.Service
         }
 
         public BaseRepository<AcceptanceRequest> AcceptanceRequests => new BaseRepository<AcceptanceRequest>(this);
-        public BaseRepository<Comment> Comments => new BaseRepository<Comment>(this);
+        public BaseRepository<Comment> Comments => new CommentRepository(this);
         public BaseRepository<Item> Items => new BaseRepository<Item>(this);
         public BaseRepository<Vote> Votes => new BaseRepository<Vote>(this);
         public BaseRepository<User> Users => new BaseRepository<User>(this);
@@ -78,6 +78,28 @@ namespace UserVoice.Service
             public string SingularText { get; init; }
             public string PluralText { get; init; }
             public string PluralTextWithCount(int count) => $"{PluralText} ({count})";
+        }
+
+        public Dictionary<ItemStatus, ItemStatusInfo> StatusInfo = new()
+        {
+            [ItemStatus.Done] = new("check_circle", "color:darkgreen", "Done"),
+            [ItemStatus.Planned] = new("pending", "color:lightblue", "Will Do"),
+            [ItemStatus.NotPlanned] = new("do_not_disturb", "color:gray", "Not Planned"),
+            [ItemStatus.NeedsInfo] = new("help", "color:#C97CFF", "Has Questions")            
+        };
+
+        public struct ItemStatusInfo
+        {
+            public ItemStatusInfo(string icon, string style, string text)
+            {
+                Icon = icon;
+                Style = style;
+                Text = text;
+            }
+
+            public string Icon { get; init; }
+            public string Style { get; init; }
+            public string Text { get; init; }
         }
     }
 }

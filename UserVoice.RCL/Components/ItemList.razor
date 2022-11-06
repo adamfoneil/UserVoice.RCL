@@ -1,4 +1,5 @@
-﻿@inject UserVoiceDataContext Data
+﻿@using Dapper.QX.Extensions
+@inject UserVoiceDataContext Data
 
 <div class="d-flex justify-content-center my-2">
     @foreach (var typeGrp in items.GroupBy(row => row.Type))
@@ -45,6 +46,9 @@
         {
             <div class="ml-4 ms-4 mt-2">
                 @row.Body
+            </div>            
+            <div>
+                <CommentEditor Comments="@comments[row.Id]" ItemId="@row.Id" CurrentUser="@CurrentUser"/>
             </div>
         }
     </Template>
@@ -53,6 +57,7 @@
 @code {
     ListItems query = new();
     IEnumerable<ListItemsResult> items = Enumerable.Empty<ListItemsResult>();
+    ILookup<int, Comment> comments = Enumerable.Empty<Comment>().ToLookup(row => row.ItemId);
     Dictionary<int, bool> expand = new();    
 
     [Parameter]
@@ -66,6 +71,12 @@
     public async Task Refresh()
     {
         items = await query.ExecuteAsync(Data.GetConnection);
+
+        comments = (await new ListComments()
+        {
+            ItemIds = items.Select(row => row.Id).ToDataTable()
+        }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
+
         expand = items.ToDictionary(row => row.Id, row => false);
         StateHasChanged();
     }
