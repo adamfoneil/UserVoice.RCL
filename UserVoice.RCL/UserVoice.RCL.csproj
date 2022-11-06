@@ -4,6 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>AO.UserVoice.RCL</PackageId>
+    <Title>User Engagement Portal</Title>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>Test cases, issue and feature reporting for Blazor Server apps</Description>
+    <Copyright>Copyright (c) 2022 Adam O'Neil</Copyright>
+    <PackageProjectUrl>https://github.com/adamfoneil/UserVoice.RCL</PackageProjectUrl>
   </PropertyGroup>
 
 
