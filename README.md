@@ -8,6 +8,40 @@ There's a similar need for capturing bug reports and feedback on impediments and
 
 I know there's a Microsoft product called "UserVoice" or there was at one time. I named this pretty hastily. Naming can be tough as you know, and I don't love the idea of copying an existing product, so I'm already considering different names for this. But since renaming solution assets can be annoying in Visual Studio, the name "UserVoice" will likely stick for now.
 
+# Visuals
+It's quite rudimentary at the moment. There's an [ItemForm](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Components/ItemForm.razor) component for inserting new items, along with an [ItemList](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Components/ItemList.razor) component.
+
+![image](https://user-images.githubusercontent.com/4549398/200182556-4546314c-208b-49bc-b371-51bda55c796a.png)
+
+Sample code:
+
+```csharp
+<div class="container">
+    <ItemList @ref="list"/>
+    <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
+</div>
+
+@code {
+    Database.User user = new();
+    ItemList? list;
+
+    protected override void OnInitialized()
+    {
+        user = new Database.User()
+        {
+            Name = "adamo",
+            Email = "adamosoftware@gmail.com",
+            TimeZoneId = "Eastern Standard Time"
+        };
+    }
+
+    async Task OnItemSaved(Database.Item item)
+    {
+        await list?.Refresh();
+    }
+}
+```
+
 # Database Setup
 Run this [sql script](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Service/Resources/DbSchema.sql) to create the required database tables.
 
@@ -34,3 +68,6 @@ builder.Services.AddScoped<UserVoiceDataContext>();
 
 # Known Issues
 There are Bootstrap styling issues between the [sample app](https://github.com/adamfoneil/UserVoice.RCL/tree/master/UserVoice.Sample) where I tested locally vs the actual target project where I needed this in NuGet form. The target project uses Bootstrap 4.x, but the sample app uses 5.x. So, some elements are missing margins and padding due to the different class names (e.g. BS4 uses `ml-` for "margin left" while BS5 uses `ms-` for "margin start"). I'm not quite sure how to resolve that at the moment.
+
+# NuGet Package
+The NuGet package is **AO.UserVoice.RCL** hosted here: https://aosoftware.blob.core.windows.net/packages/index.json
