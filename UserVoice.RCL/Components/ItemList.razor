@@ -51,7 +51,7 @@
                 @row.Body
             </div>            
             <div>
-                <CommentEditor Comments="@comments[row.Id]" ItemId="@row.Id" CurrentUser="@CurrentUser"/>
+                <CommentEditor Comments="@comments[row.Id]" ItemId="@row.Id" CurrentUser="@CurrentUser" CommentSaved="OnCommentSaved"/>
             </div>
         }
     </Template>
@@ -75,10 +75,7 @@
     {
         items = await query.ExecuteAsync(Data.GetConnection);
 
-        comments = (await new ListComments()
-        {
-            ItemIds = items.Select(row => row.Id).ToDataTable()
-        }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
+        await RefreshComments();
 
         expand = items.ToDictionary(row => row.Id, row => false);
         StateHasChanged();
@@ -100,5 +97,18 @@
     {
         expand[rowId] = !expanded;
         StateHasChanged();
+    }
+
+    async Task RefreshComments()
+    {
+        comments = (await new ListComments()
+        {
+            ItemIds = items.Select(row => row.Id).ToDataTable()
+        }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
+    }
+
+    async Task OnCommentSaved(Comment comment)
+    {
+        await RefreshComments();
     }
 }
