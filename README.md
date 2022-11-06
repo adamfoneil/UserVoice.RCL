@@ -10,6 +10,7 @@ I know there's a Microsoft product called "UserVoice" or there was at one time. 
 
 # Database Setup
 Run this [sql script](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Service/Resources/DbSchema.sql) to create the required database tables.
+
 You'll also need to add a few `GRANTs` in your database due to the `uservoice` schema being added:
 <details>
   <summary>script</summary>
@@ -22,3 +23,14 @@ You'll also need to add a few `GRANTs` in your database due to the `uservoice` s
   ```
   
 </details>
+
+# Application Setup
+In your application startup, configure a [ConnectionStrings](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Service/Models/ConnectionStrings.cs) object, and add the [UserVoiceDataContext](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Service/UserVoiceDataContext.cs).
+
+```csharp
+builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
+builder.Services.AddScoped<UserVoiceDataContext>();
+```
+
+# Known Issues
+There are Bootstrap styling issues between the [sample app](https://github.com/adamfoneil/UserVoice.RCL/tree/master/UserVoice.Sample) where I tested locally vs the actual target project where I needed this in NuGet form. The target project uses Bootstrap 4.x, but the sample app uses 5.x. So, some elements are missing margins and padding due to the different class names (e.g. BS4 uses `ml-` for "margin left" while BS5 uses `ms-` for "margin start"). I'm not quite sure how to resolve that at the moment.
