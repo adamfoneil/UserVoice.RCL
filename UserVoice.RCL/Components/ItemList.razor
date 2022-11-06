@@ -39,7 +39,10 @@
             </div>
 
             <div>
-
+                @if (row.ItemStatus.HasValue)
+                {
+                    <RadzenIcon Icon="@Data.StatusInfo[row.ItemStatus.Value].Icon" Style="@Data.StatusInfo[row.ItemStatus.Value].Style"/>
+                }
             </div>            
         </div>
         @if (expand[row.Id])
