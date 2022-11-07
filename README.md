@@ -69,7 +69,7 @@ builder.Services.AddScoped<UserVoiceDataContext>();
 # Known Issues
 There are Bootstrap styling issues between the [sample app](https://github.com/adamfoneil/UserVoice.RCL/tree/master/UserVoice.Sample) where I tested locally vs the actual target project where I needed this in NuGet form. The target project uses Bootstrap 4.x, but the sample app uses 5.x. So, some elements are missing margins and padding due to the different class names (e.g. BS4 uses `ml-` for "margin left" while BS5 uses `ms-` for "margin start"). I'm not quite sure how to resolve that at the moment.
 
-The [Spinner](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Components/Spinner.razor) component works in the Sample app, but the image is broken when used in NuGet form.
+The [Spinner](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Components/Widgets/Spinner.razor) component works in the Sample app, but the image is broken when used in NuGet form.
 
 # NuGet Package
 The NuGet package is **AO.UserVoice.RCL** hosted here: https://aosoftware.blob.core.windows.net/packages/index.json
