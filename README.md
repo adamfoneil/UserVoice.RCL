@@ -13,7 +13,7 @@ It's quite rudimentary at the moment. There's an [ItemForm](https://github.com/a
 
 ![image](https://github.com/adamfoneil/UserVoice.RCL/blob/master/demo.gif)
 
-Sample code:
+Sample main page implementation from the internal [Sample app](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.Sample/Pages/Index.razor):
 
 ```csharp
 <div class="container">
