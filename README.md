@@ -54,6 +54,7 @@ You'll also need to add a few `GRANTs` in your database due to the `uservoice` s
   GRANT INSERT ON SCHEMA ::[uservoice] TO *your app user account*
   GRANT UPDATE ON SCHEMA ::[uservoice] TO *your app user account*
   GRANT DELETE ON SCHEMA ::[uservoice] TO *your app user account*
+  GRANT EXECUTE ON schema::[uservoice] TO *your app user account*
   ```
   
 </details>
