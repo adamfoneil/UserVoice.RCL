@@ -11,9 +11,9 @@ I know there's a Microsoft product called "UserVoice" or there was at one time. 
 # Visuals
 It's quite rudimentary at the moment. There's an [ItemForm](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Components/ItemForm.razor) component for inserting new items, along with an [ItemList](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.RCL/Components/ItemList.razor) component.
 
-![image](https://user-images.githubusercontent.com/4549398/200182556-4546314c-208b-49bc-b371-51bda55c796a.png)
+![image](https://github.com/adamfoneil/UserVoice.RCL/blob/master/demo.gif)
 
-Sample code:
+Sample main page implementation from the internal [Sample app](https://github.com/adamfoneil/UserVoice.RCL/blob/master/UserVoice.Sample/Pages/Index.razor):
 
 ```csharp
 <div class="container">
