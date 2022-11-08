@@ -32,7 +32,7 @@ namespace UserVoice.Service
         public BaseRepository<Comment> Comments => new CommentRepository(this);
         public BaseRepository<Item> Items => new ItemRepository(this);
         public BaseRepository<Vote> Votes => new BaseRepository<Vote>(this);
-        public BaseRepository<User> Users => new UserRepository(this);
+        public UserRepository Users => new UserRepository(this);
 
         public async Task CreateSchemaIfNotExistsAsync()
         {

@@ -7,11 +7,11 @@
     <PackageId>AO.UserVoice.RCL</PackageId>
     <Title>User Engagement Portal</Title>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Description>Test cases, issue and feature reporting for Blazor Server apps</Description>
+    <Description>Test cases, UAT features, issue reporting and feature voting for Blazor Server apps</Description>
     <Copyright>Copyright (c) 2022 Adam O'Neil</Copyright>
     <PackageProjectUrl>https://github.com/adamfoneil/UserVoice.RCL</PackageProjectUrl>
     <Authors>Adam O'Neil</Authors>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
