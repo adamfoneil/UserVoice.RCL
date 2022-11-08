@@ -32,12 +32,7 @@ namespace UserVoice.Service
         public BaseRepository<Comment> Comments => new CommentRepository(this);
         public BaseRepository<Item> Items => new ItemRepository(this);
         public BaseRepository<Vote> Votes => new BaseRepository<Vote>(this);
-        public BaseRepository<User> Users => new BaseRepository<User>(this);
-
-        public async Task MergeUsersAsync(IEnumerable<User> users)
-        {
-            foreach (var user in users) await Users.MergeAsync(user);            
-        }
+        public BaseRepository<User> Users => new UserRepository(this);
 
         public async Task CreateSchemaIfNotExistsAsync()
         {
