@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System.Data;
 using System.Reflection;
 using UserVoice.Database;
+using UserVoice.RCL.Service.Repositories;
 using UserVoice.Service.Extensions;
 using UserVoice.Service.Models;
 using UserVoice.Service.Repositories;
@@ -29,7 +30,7 @@ namespace UserVoice.Service
 
         public BaseRepository<AcceptanceRequest> AcceptanceRequests => new BaseRepository<AcceptanceRequest>(this);
         public BaseRepository<Comment> Comments => new CommentRepository(this);
-        public BaseRepository<Item> Items => new BaseRepository<Item>(this);
+        public BaseRepository<Item> Items => new ItemRepository(this);
         public BaseRepository<Vote> Votes => new BaseRepository<Vote>(this);
         public BaseRepository<User> Users => new BaseRepository<User>(this);
 
@@ -58,7 +59,7 @@ namespace UserVoice.Service
 
         public Dictionary<ItemType, ItemTypeInfo> TypeInfo = new()
         {
-            [ItemType.Issue] = new("stop", "color:maroon", "Issue", "Issues"),
+            [ItemType.Issue] = new("feedback", "color:maroon", "Issue", "Issues"),
             [ItemType.FeatureIdea] = new("lightbulb", "color:darkgreen", "Feature/Idea", "Features/Ideas"),
             [ItemType.TestCase] = new("science", "color:#cc33ff", "Test Case", "Test Cases")
         };
@@ -91,6 +92,27 @@ namespace UserVoice.Service
         public struct ItemStatusInfo
         {
             public ItemStatusInfo(string icon, string style, string text)
+            {
+                Icon = icon;
+                Style = style;
+                Text = text;
+            }
+
+            public string Icon { get; init; }
+            public string Style { get; init; }
+            public string Text { get; init; }
+        }
+
+        public Dictionary<Response, AcceptanceRequestResponseInfo> ResponseInfo = new()
+        {
+            [Response.Pending] = new("pending", "color:lightgray", "Pending"),
+            [Response.Accepted] = new("assignment_turned_in", "color:green", "Accepted"),
+            [Response.Rejected] = new("do_not_disturb_on", "color:red", "Rejected")
+        };
+
+        public struct AcceptanceRequestResponseInfo
+        {
+            public AcceptanceRequestResponseInfo(string icon, string style, string text)
             {
                 Icon = icon;
                 Style = style;

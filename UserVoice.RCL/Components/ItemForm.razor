@@ -33,27 +33,44 @@
             <RadzenHtmlEditorUnderline />
             <RadzenHtmlEditorStrikeThrough />
             <RadzenHtmlEditorSeparator />
+            <RadzenHtmlEditorUnorderedList />
             <RadzenHtmlEditorColor />
             <RadzenHtmlEditorBackground />
-            <RadzenHtmlEditorRemoveFormat />
+            <RadzenHtmlEditorRemoveFormat />            
         </RadzenHtmlEditor>
     </div>
+    
+    <div class="my-2 d-flex align-items-center justify-content-between">
+        @if (CurrentUser?.Role == Role.ProductOwner && item.Type == ItemType.TestCase)
+        {
+            <FormField Label="Assign To:" LabelColumns="4">
+                <RadzenDropDown @bind-Value="@item.AssignToUserId" Data="users" ValueProperty="Id" TextProperty="Name"/>
+            </FormField>
+        }
 
-    <div class="d-flex align-items-center">
-        <button type="submit" class="btn btn-secondary">Save</button>
-        <Spinner @ref="spinner"/>
-    </div>
+        <div class="d-flex align-items-center">
+            <button type="submit" class="btn btn-secondary">Save</button>
+            <Spinner @ref="spinner" />
+        </div>
+    </div>    
+
 </EditForm>
 
 @code {
     Item item = DefaultItem();
     Spinner? spinner;
+    IEnumerable<User> users = Enumerable.Empty<User>();
 
     [Parameter]
     public User? CurrentUser { get; set; }
 
     [Parameter]
     public EventCallback<Item> ItemSaved { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await new ListUsers() { Role = Role.SignOffUser }.ExecuteAsync(Data.GetConnection);
+    }
 
     async Task OnSubmit(EditContext editContext)
     {

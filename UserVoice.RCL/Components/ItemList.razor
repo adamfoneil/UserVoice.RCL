@@ -5,7 +5,9 @@
     @foreach (var typeGrp in items.GroupBy(row => row.Type))
     {
         <div class="mx-3">
-            <RadzenButton Icon="@Data.TypeInfo[typeGrp.Key].Icon" Text="@Data.TypeInfo[typeGrp.Key].PluralTextWithCount(typeGrp.Count())" Click="@(() => ApplyFilter(typeGrp.Key))" ButtonStyle="ButtonStyle.Secondary"/>
+            <RadzenButton Icon="@Data.TypeInfo[typeGrp.Key].Icon" 
+                Text="@Data.TypeInfo[typeGrp.Key].PluralTextWithCount(typeGrp.Count())" Click="@(() => ApplyFilter(typeGrp.Key))" 
+                ButtonStyle="ButtonStyle.Secondary"/>
         </div>
     }
     @if (query.Type.HasValue)
@@ -22,10 +24,7 @@
             <div class="d-flex align-items-center" style="cursor:pointer" @onclick="@(() => ToggleSection(row.Id))">
                 <div class="text-muted d-flex align-items-center">
                     <RadzenIcon Icon="@Data.TypeInfo[row.Type].Icon" class="mr-1 me-2" Style="@Data.TypeInfo[row.Type].Style"/>                    
-                    @{
-                        var itemText = $"#{row.Id}";
-                    }
-                    <ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" @bind-Value="@expand[row.Id]" Text="@itemText" />
+                    <span class="text-muted">#@(row.Id)</span>                    
                 </div>
 
                 <div class="ms-2 ml-2">
@@ -35,12 +34,37 @@
                 <div class="ms-2 ml-2 text-muted small" title="@row.DateInfo()">
                     @row.PostDate.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now)
                 </div>
+
+                <ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" @bind-Value="@expand[row.Id]" class="ml-2 ms-2"/>
             </div>
 
             <div>
                 @if (row.ItemStatus.HasValue)
                 {
-                    <RadzenIcon Icon="@Data.StatusInfo[row.ItemStatus.Value].Icon" Style="@Data.StatusInfo[row.ItemStatus.Value].Style"/>
+                    <div>
+                        <RadzenIcon Icon="@Data.StatusInfo[row.ItemStatus.Value].Icon" Style="@Data.StatusInfo[row.ItemStatus.Value].Style" />
+                    </div>                    
+                }
+
+                @if (acceptanceRequests[row.Id].Any())
+                {
+                    <div>
+                        @foreach (var responseGrp in acceptanceRequests[row.Id].GroupBy(row => row.Response))
+                        {
+                            <div class="d-flex align-items-start">
+                                <div class="d-flex align-items-center">
+                                    <RadzenIcon Icon="@Data.ResponseInfo[responseGrp.Key].Icon" Style="@Data.ResponseInfo[responseGrp.Key].Style" class="me-1 mr-1" />
+                                    <span>@Data.ResponseInfo[responseGrp.Key].Text</span>
+                                </div>
+                                <ul>
+                                    @foreach (var ar in responseGrp)
+                                    {
+                                        <li>@ar.UserName</li>
+                                    }
+                                </ul>
+                            </div>                            
+                        }
+                    </div>
                 }
             </div>            
         </div>
@@ -48,7 +72,7 @@
         {
             <div class="ml-5 ms-5 mt-2">
                 <RadzenCard>
-                    @row.Body    
+                    @ToMarkup(row.Body)
                 </RadzenCard>                
             </div>            
             <div>
@@ -62,10 +86,13 @@
     ListItems query = new();
     IEnumerable<ListItemsResult> items = Enumerable.Empty<ListItemsResult>();
     ILookup<int, Comment> comments = Enumerable.Empty<Comment>().ToLookup(row => row.ItemId);
+    ILookup<int, AcceptanceRequest> acceptanceRequests = Enumerable.Empty<AcceptanceRequest>().ToLookup(row => row.ItemId);
     Dictionary<int, bool> expand = new();    
 
     [Parameter]
     public User? CurrentUser { get; set; }
+
+    MarkupString ToMarkup(string? input) => new MarkupString(input ?? string.Empty);
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,6 +102,11 @@
     public async Task Refresh()
     {
         items = await query.ExecuteAsync(Data.GetConnection);
+
+        acceptanceRequests = (await new ListAcceptanceRequests()
+        {
+            ItemIds = items.Select(row => row.Id).ToDataTable()
+        }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
 
         await RefreshComments();
 

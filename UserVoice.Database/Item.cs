@@ -1,6 +1,7 @@
 ﻿using AO.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
@@ -43,6 +44,9 @@ namespace UserVoice.Database
         /// - feedback acted upon, a feature implemented, and therefore not open for voting
         /// </summary>
         public bool IsActive { get; set; } = true;
+
+        [NotMapped]
+        public int? AssignToUserId { get; set; }
 
         public static Dictionary<Role, IEnumerable<ItemType>> AllowedTypes => new Dictionary<Role, IEnumerable<ItemType>>()
         {

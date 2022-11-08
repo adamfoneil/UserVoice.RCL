@@ -1,5 +1,6 @@
 ﻿using AO.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
@@ -17,7 +18,7 @@ namespace UserVoice.Database
         /// <summary>
         /// item not accepted (please provide reason)
         /// </summary>
-        Declined
+        Rejected
     }
 
     /// <summary>
@@ -39,5 +40,8 @@ namespace UserVoice.Database
         public Response Response { get; set; } = Response.Pending;
 
         public string Comments { get; set; }
+
+        [NotMapped]
+        public string UserName { get; set; }
     }
 }

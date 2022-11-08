@@ -1,4 +1,4 @@
-﻿<RadzenButton Icon="@Icon" Click="OnClick" ButtonStyle="ButtonStyle.Light" Text="@Text"/>
+﻿<RadzenButton Icon="@Icon" Click="OnClick" ButtonStyle="ButtonStyle.Light" Text="@Text" class="@Css.GetClass(Parameters)"/>
 
 @code {
     [Parameter]
@@ -12,6 +12,9 @@
 
     [Parameter]
     public EventCallback<bool> OnToggled { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Parameters { get; set; }
 
     string Icon => (Value) ? "expand_less" : "expand_more";
 
