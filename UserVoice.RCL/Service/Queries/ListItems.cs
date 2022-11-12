@@ -30,6 +30,7 @@ namespace UserVoice.Service.Queries
         public int TotalDownvotes { get; set; }
         public int TotalVotes { get; set; }
         public DateTime? StatusDate { get; set; }
+        public int AcceptanceRequestCount { get; set; }
 
         public DateTime PostDate => DateModified ?? DateCreated;
 
@@ -39,6 +40,8 @@ namespace UserVoice.Service.Queries
             if (DateModified.HasValue) result += $", modified {DateModified:ddd M/d/yy h:mm t}";
             return result;
         }
+
+        public bool NeedsSignOff => Type == ItemType.TestCase && (AcceptanceRequestCount == 0);        
     }
 
     public class ListItems : Query<ListItemsResult>
@@ -67,7 +70,8 @@ namespace UserVoice.Service.Queries
                     ) [votes] ON [src].[Id]=[votes].[ItemId]
             ) SELECT 
                 [i].*, 
-                COALESCE([i].[TotalUpvotes], 0) + COALESCE([i].[TotalDownvotes], 0) AS [TotalVotes]
+                COALESCE([i].[TotalUpvotes], 0) + COALESCE([i].[TotalDownvotes], 0) AS [TotalVotes],
+                (SELECT COUNT(1) FROM [uservoice].[AcceptanceRequest] WHERE [ItemId]=[i].[Id]) AS [AcceptanceRequestCount]
             FROM 
                 [votes] [i]
             ORDER BY 

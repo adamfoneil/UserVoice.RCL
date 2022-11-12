@@ -1,0 +1,31 @@
+﻿@inject UserVoiceDataContext Data
+
+<RadzenButton Click="ToggleAcceptance" ButtonStyle="@Style" Icon="@Icon" class="@Css.GetClass(Parameters)"/>
+
+@code {
+    [Parameter]
+    public Response Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Response> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<Response> Change { get; set; }
+
+    [Parameter]
+    public int AcceptanceRequestId { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? Parameters { get; set; }
+
+    ButtonStyle Style => (Value == Response.Pending) ? ButtonStyle.Light : ButtonStyle.Success;
+
+    string Icon => (Value == Response.Pending) ? "pending" : "check_circle";
+
+    async Task ToggleAcceptance()
+    {
+        Value = (Value == Response.Pending) ? Response.Accepted : Response.Pending;
+        await ValueChanged.InvokeAsync(Value);
+        await Change.InvokeAsync(Value);
+    }
+}

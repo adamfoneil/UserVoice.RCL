@@ -59,12 +59,25 @@
                                 <ul>
                                     @foreach (var ar in responseGrp)
                                     {
-                                        <li>@ar.UserName</li>
+                                        <li class="d-flex align-items-center">
+                                            <div class="mr-1 me-1">@ar.UserName</div>
+                                            @if (ar.UserId == CurrentUser?.Id)
+                                            {                                                
+                                                <AcceptButton @bind-Value="@ar.Response" Change="@((val) => OnAcceptChanged(ar.Id, val))" class="ml-1 ms-1" />
+                                            }
+                                        </li>
                                     }
                                 </ul>
-                            </div>                            
+                            </div>
                         }
                     </div>
+                }
+                
+                @if (row.NeedsSignOff)
+                {
+                    <FormField Label="Assign To:" LabelColumns="4">
+                        <RadzenDropDown Data="users" ValueProperty="Id" TextProperty="Name" TValue="int?" AllowClear="true" Change="@((val) => CreateAcceptanceRequest(val, row.Id))" />
+                    </FormField>
                 }
             </div>            
         </div>
@@ -88,6 +101,7 @@
     ILookup<int, Comment> comments = Enumerable.Empty<Comment>().ToLookup(row => row.ItemId);
     ILookup<int, AcceptanceRequest> acceptanceRequests = Enumerable.Empty<AcceptanceRequest>().ToLookup(row => row.ItemId);
     Dictionary<int, bool> expand = new();    
+    IEnumerable<User> users = Enumerable.Empty<User>();
 
     [Parameter]
     public User? CurrentUser { get; set; }
@@ -96,7 +110,13 @@
 
     protected override async Task OnInitializedAsync()
     {
+        users = await new ListUsers() { Role = Role.SignOffUser }.ExecuteAsync(Data.GetConnection);
         await Refresh();
+    }
+
+    protected override void OnParametersSet()
+    {
+        Data.User = CurrentUser;
     }
 
     public async Task Refresh()
@@ -140,8 +160,25 @@
         }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
     }
 
-    async Task OnCommentSaved(Comment comment)
+    async Task OnCommentSaved(Comment comment) => await RefreshComments();
+
+    async Task CreateAcceptanceRequest(object userIdValue, int itemId)
     {
-        await RefreshComments();
+        if (userIdValue is null) return;
+
+        await Data.AcceptanceRequests.SaveAsync(new AcceptanceRequest()
+        {
+            UserId = (int)userIdValue,
+            ItemId = itemId
+        });
+
+        await Refresh();
+    }
+
+    async Task OnAcceptChanged(int acceptanceRequestId, Response response)
+    {
+        var request = await Data.AcceptanceRequests.GetAsync(acceptanceRequestId);
+        request.Response = response;
+        await Data.AcceptanceRequests.SaveAsync(request);
     }
 }
