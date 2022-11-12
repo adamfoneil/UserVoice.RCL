@@ -16,9 +16,15 @@
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? Parameters { get; set; }
 
-    ButtonStyle Style => (Value == Response.Pending) ? ButtonStyle.Light : ButtonStyle.Success;
+    ButtonStyle Style => 
+        (Value == Response.Pending) ? ButtonStyle.Light : 
+        (Value == Response.Accepted) ? ButtonStyle.Success :
+        ButtonStyle.Danger;
 
-    string Icon => (Value == Response.Pending) ? "pending" : "check_circle";
+    string Icon => 
+        (Value == Response.Pending) ? "pending" : 
+        (Value == Response.Accepted) ? "check_circle" :
+        "do_not_disturb_on";
 
     async Task ToggleAcceptance()
     {

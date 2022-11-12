@@ -1,0 +1,43 @@
+﻿<div class="d-flex align-items-center">
+    <RadzenSwitch @bind-Value="@Value" Change="OnChanged" />
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <RadzenIcon Icon="@Icon"/>
+    }
+    <RadzenLabel Text="@Text" onclick="@(() => OnChanged(Value))"/>
+</div>
+
+
+@code {
+    [Parameter]
+    public bool Value { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> Change { get; set; }
+
+    [Parameter]
+    public string YesText { get; set; } = "Yes";
+
+    [Parameter]
+    public string NoText { get; set; } = "No";
+
+    [Parameter]
+    public string YesIcon { get; set; } = default!;
+
+    [Parameter]
+    public string NoIcon { get; set; } = default!;
+
+    string Text => (Value) ? YesText : NoText;
+
+    string Icon => (Value) ? YesIcon : NoIcon;
+
+    async Task OnChanged(bool value)
+    {
+        Value = !Value;
+        await ValueChanged.InvokeAsync(Value);
+        await Change.InvokeAsync(Value);
+    }
+}

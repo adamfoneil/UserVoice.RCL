@@ -13,10 +13,23 @@
     @if (query.Type.HasValue)
     {
         <div class="mx-3">
-            <RadzenButton Text="Show All" Click="@(async () => { query.Type = null; await Refresh(); })"/>
+            <RadzenButton Text="Show All" Click="@(async () => { query.Response = null; query.Type = null; await Refresh(); })"/>
         </div>
     }
 </div>
+
+@if (query.Type == ItemType.TestCase)
+{
+    <div class="d-flex justify-content-center my-2">
+        @foreach (var item in acceptanceMetrics)
+        {
+            <div class="mx-3">
+                <a href="#" class="mr-2 me-2" @onclick:preventDefault @onclick="@(async () => { query.Response = item.Response; await Refresh(); })">@item.Response.ToString()</a>
+                <span>@item.Percent.ToString("p0")</span>
+            </div>
+        }
+    </div>
+}
 
 <RadzenDataList Data="@items">
     <Template Context="row">        
@@ -89,7 +102,9 @@
                 </RadzenCard>                
             </div>            
             <div>
-                <CommentEditor Comments="@comments[row.Id]" ItemId="@row.Id" CurrentUser="@CurrentUser" CommentSaved="OnCommentSaved"/>
+                <CommentEditor 
+                    Comments="@comments[row.Id]" CommentSaved="OnCommentSaved"
+                    ItemId="@row.Id" CurrentUser="@CurrentUser" ItemType="@row.Type" AcceptanceRequestId="@GetAcceptanceRequestId(row.Id)"/>
             </div>
         }
     </Template>
@@ -102,6 +117,14 @@
     ILookup<int, AcceptanceRequest> acceptanceRequests = Enumerable.Empty<AcceptanceRequest>().ToLookup(row => row.ItemId);
     Dictionary<int, bool> expand = new();    
     IEnumerable<User> users = Enumerable.Empty<User>();
+    IEnumerable<AcceptanceMetricsResult> acceptanceMetrics = Enumerable.Empty<AcceptanceMetricsResult>();
+
+    int? GetAcceptanceRequestId(int itemId)
+    {
+        var requests = acceptanceRequests[itemId].Where(row => row.Response == Response.Pending).ToDictionary(row => row.UserId);
+        var userId = CurrentUser?.Id ?? 0;
+        return requests.ContainsKey(userId) ? requests[userId].Id : null;
+    }
 
     [Parameter]
     public User? CurrentUser { get; set; }
@@ -127,6 +150,11 @@
         {
             ItemIds = items.Select(row => row.Id).ToDataTable()
         }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
+
+        if (query.Type == ItemType.TestCase)
+        {
+            acceptanceMetrics = await new AcceptanceMetrics().ExecuteAsync(Data.GetConnection);
+        }
 
         await RefreshComments();
 
@@ -160,7 +188,7 @@
         }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
     }
 
-    async Task OnCommentSaved(Comment comment) => await RefreshComments();
+    async Task OnCommentSaved(Comment comment) => await Refresh();
 
     async Task CreateAcceptanceRequest(object userIdValue, int itemId)
     {

@@ -1,5 +1,6 @@
 ﻿using AO.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
@@ -38,5 +39,11 @@ namespace UserVoice.Database
         public string Body { get; set; }
 
         public static bool AllowStatus(Role role) => role == Role.ProductOwner;
+
+        [NotMapped]
+        public int? AcceptanceRequestId { get; set; }
+
+        [NotMapped]
+        public bool IsRejected { get; set; }
     }
 }

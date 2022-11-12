@@ -85,6 +85,10 @@ namespace UserVoice.Service.Queries
         [Where("[i].[Type]=@type")]
         public ItemType? Type { get; set; }
 
+        [Case(Database.Response.Unassigned, "NOT EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [ItemId]=[i].[Id])")]
+        [Where("EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [Response]=@response AND [ItemId]=[i].[Id])")]
+        public Response? Response { get; set; }
+
         [OrderBy(ListItemsSortOptions.LatestModifedOrAdded, "COALESCE([i].[DateModified], [i].[DateCreated]) DESC")]
         [OrderBy(ListItemsSortOptions.LatestStatusChange, "[StatusDate] DESC")]
         [OrderBy(ListItemsSortOptions.MostVotes, "[TotalVotes] DESC")]

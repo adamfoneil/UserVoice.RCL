@@ -10,15 +10,19 @@ namespace UserVoice.Database
         /// <summary>
         /// no response yet
         /// </summary>
-        Pending,
+        Pending = 0,
         /// <summary>
         /// item is accepted
         /// </summary>
-        Accepted,
+        Accepted = 1,
         /// <summary>
         /// item not accepted (please provide reason)
         /// </summary>
-        Rejected
+        Rejected = 2,
+        /// <summary>
+        /// acceptance request row not created
+        /// </summary>
+        Unassigned = -1
     }
 
     /// <summary>
