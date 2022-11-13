@@ -12,6 +12,7 @@
     <PackageProjectUrl>https://github.com/adamfoneil/UserVoice.RCL</PackageProjectUrl>
     <Authors>Adam O'Neil</Authors>
     <Version>1.0.6</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
