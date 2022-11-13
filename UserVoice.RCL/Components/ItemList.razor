@@ -2,6 +2,11 @@
 @inject UserVoiceDataContext Data
 
 <div class="d-flex justify-content-center my-2">
+    <div class="d-flex align-items-center">
+        <RadzenCheckBox @bind-Value="@query.IsActive" Change="(async () => await Refresh())" TValue="bool?" />
+        <span @onclick="@(async () => { query.IsActive = !query.IsActive; await Refresh(); })" style="cursor:pointer" class="ml-2 ms-2">Active Items</span>
+    </div>
+
     @foreach (var typeGrp in items.GroupBy(row => row.Type))
     {
         <div class="mx-3">
@@ -21,7 +26,7 @@
 @if (query.Type == ItemType.TestCase)
 {
     <div class="d-flex justify-content-center my-2">
-        @foreach (var item in acceptanceMetrics)
+        @foreach (var item in acceptanceMetrics.Where(row => row.Percent > 0))
         {
             <div class="mx-3">
                 <a href="#" class="mr-2 me-2" @onclick:preventDefault @onclick="@(async () => { query.Response = item.Response; await Refresh(); })">@item.Response.ToString()</a>
@@ -99,6 +104,15 @@
             <div class="ml-5 ms-5 mt-2">
                 <RadzenCard>
                     @ToMarkup(row.Body)
+
+                    @if (row.CreatedBy?.Equals(CurrentUser?.Name) ?? false)
+                    {
+                        <hr/>
+                        <div class="d-flex align-items-center">
+                            <RadzenCheckBox @bind-Value="@row.IsActive" Change="@((val) => OnActiveChange(row))" TValue="bool"/>
+                            <span @onclick="@(async () => { row.IsActive = !row.IsActive; await OnActiveChange(row); })" style="cursor:pointer" class="ml-2 ms-2">Active</span>
+                        </div>
+                    }
                 </RadzenCard>                
             </div>            
             <div>
@@ -153,7 +167,7 @@
 
         if (query.Type == ItemType.TestCase)
         {
-            acceptanceMetrics = await new AcceptanceMetrics().ExecuteAsync(Data.GetConnection);
+            acceptanceMetrics = await new AcceptanceMetrics() { IsActive = query.IsActive ?? true }.ExecuteAsync(Data.GetConnection);
         }
 
         await RefreshComments();
@@ -209,4 +223,6 @@
         request.Response = response;
         await Data.AcceptanceRequests.SaveAsync(request);
     }
+
+    async Task OnActiveChange(ListItemsResult row) => await Data.Items.SaveAsync(row);    
 }

@@ -1,4 +1,5 @@
-﻿using Dapper.QX;
+﻿using CopyObjectLibrary;
+using Dapper.QX;
 using Dapper.QX.Attributes;
 using UserVoice.Database;
 
@@ -41,7 +42,9 @@ namespace UserVoice.Service.Queries
             return result;
         }
 
-        public bool NeedsSignOff => Type == ItemType.TestCase && (AcceptanceRequestCount == 0);        
+        public bool NeedsSignOff => Type == ItemType.TestCase && (AcceptanceRequestCount == 0);
+
+        public static implicit operator Item(ListItemsResult row) => row.CopyAs<Item>();
     }
 
     public class ListItems : Query<ListItemsResult>

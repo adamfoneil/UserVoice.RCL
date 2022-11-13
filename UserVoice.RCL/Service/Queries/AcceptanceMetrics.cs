@@ -20,12 +20,15 @@ namespace UserVoice.Service.Queries
             )
 
             DECLARE @total decimal
-            SELECT @total = COUNT(1) FROM [uservoice].[AcceptanceRequest]
+            SELECT @total = COUNT(1) 
+            FROM [uservoice].[AcceptanceRequest] [ar]
+            INNER JOIN [uservoice].[Item] [i] ON [ar].[ItemId]=[i].[Id]
+            WHERE [i].[IsActive]=@isActive
 
             DECLARE @unassigned int
             SELECT @unassigned = COUNT(1)
             FROM [uservoice].[Item] [i]
-            WHERE [Type]=3 AND NOT EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [ItemId]=[i].[Id])
+            WHERE [IsActive]=@isActive AND [Type]=3 AND NOT EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [ItemId]=[i].[Id])
 
             SET @total = @total + @unassigned
 
@@ -36,7 +39,10 @@ namespace UserVoice.Service.Queries
                 COUNT(1) AS [Count],
                 COUNT(1) / @total
             FROM
-                [uservoice].[AcceptanceRequest]
+                [uservoice].[AcceptanceRequest] [ar]
+                INNER JOIN [uservoice].[Item] [i] ON [ar].[ItemId]=[i].[Id]
+            WHERE
+                [i].[IsActive]=@isActive
             GROUP BY
                 [Response]
     
@@ -49,5 +55,7 @@ namespace UserVoice.Service.Queries
             SELECT * FROM @results")
         {
         }
+
+        public bool IsActive { get; set; }
     }
 }
