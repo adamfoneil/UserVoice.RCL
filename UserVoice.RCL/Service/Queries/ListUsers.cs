@@ -11,7 +11,7 @@ namespace UserVoice.Service.Queries
         {
         }
 
-        [Where("[Role]=@role")]
+        [Where("(([Role] & @role) = @role)")]
         public Role? Role { get; set; }
     }
 }

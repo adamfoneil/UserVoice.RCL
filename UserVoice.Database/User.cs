@@ -6,21 +6,22 @@ using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
 {
+    [Flags]
     public enum Role
     {
         /// <summary>
         /// can make requests, vote on features, post comments (bot not select status)
         /// </summary>
-        User,
+        User = 1,
         /// <summary>
         /// developer or product rep who can post comments with a status selected,
         /// can add work item links
         /// </summary>
-        ProductOwner,
+        ProductOwner = 2,
         /// <summary>
         /// may submit test items and reply to acceptance requests
         /// </summary>
-        SignOffUser
+        SignOffUser = 4
     }
 
     /// <summary>
@@ -44,5 +45,7 @@ namespace UserVoice.Database
         public bool IsActive { get; set; } = true;
 
         public DateTime LocalTime => Timestamp.Local(TimeZoneId);
+
+        public bool MayAssignAcceptanceRequests => Role.HasFlag(Role.ProductOwner) || Role.HasFlag(Role.SignOffUser);
     }
 }

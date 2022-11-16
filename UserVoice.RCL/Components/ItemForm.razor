@@ -41,7 +41,7 @@
     </div>
     
     <div class="my-2 d-flex align-items-center justify-content-between">
-        @if (CurrentUser?.Role == Role.ProductOwner && item.Type == ItemType.TestCase)
+        @if ((CurrentUser?.MayAssignAcceptanceRequests ?? false) && item.Type == ItemType.TestCase)
         {
             <FormField Label="Assign To:" LabelColumns="4">
                 <RadzenDropDown @bind-Value="@item.AssignToUserId" Data="users" ValueProperty="Id" TextProperty="Name"/>
