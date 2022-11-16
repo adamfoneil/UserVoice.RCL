@@ -92,6 +92,9 @@ namespace UserVoice.Service.Queries
         [Where("EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [Response]=@response AND [ItemId]=[i].[Id])")]
         public Response? Response { get; set; }
 
+        [Where("EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [UserId]=@assignedToUserId AND [ItemId]=[i].[Id])")]
+        public int? AssignedToUserId { get; set; }
+
         [OrderBy(ListItemsSortOptions.LatestModifedOrAdded, "COALESCE([i].[DateModified], [i].[DateCreated]) DESC")]
         [OrderBy(ListItemsSortOptions.LatestStatusChange, "[StatusDate] DESC")]
         [OrderBy(ListItemsSortOptions.MostVotes, "[TotalVotes] DESC")]
