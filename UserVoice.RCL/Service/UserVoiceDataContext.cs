@@ -29,8 +29,8 @@ namespace UserVoice.Service
         }
 
         public BaseRepository<AcceptanceRequest> AcceptanceRequests => new BaseRepository<AcceptanceRequest>(this);
-        public BaseRepository<Comment> Comments => new CommentRepository(this);
-        public BaseRepository<Item> Items => new ItemRepository(this);
+        public CommentRepository Comments => new CommentRepository(this);
+        public ItemRepository Items => new ItemRepository(this);
         public BaseRepository<Vote> Votes => new BaseRepository<Vote>(this);
         public UserRepository Users => new UserRepository(this);
 

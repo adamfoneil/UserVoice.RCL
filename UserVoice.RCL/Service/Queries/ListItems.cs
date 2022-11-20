@@ -10,7 +10,8 @@ namespace UserVoice.Service.Queries
         LatestModifedOrAdded,
         LatestStatusChange,
         MostVotes,
-        MostUpvoted
+        MostUpvoted,
+        LatestComment
     }
 
     public class ListItemsResult
@@ -32,9 +33,11 @@ namespace UserVoice.Service.Queries
         public int TotalVotes { get; set; }
         public DateTime? StatusDate { get; set; }
         public int AcceptanceRequestCount { get; set; }
+        public DateTime? LatestCommentDate { get; set; }
+        public string? LatestCommentUser { get; set; }
 
         public DateTime PostDate => DateModified ?? DateCreated;
-
+        
         public string DateInfo()
         {
             var result = $"Created {DateCreated:ddd M/d/yy h:mm t}";
@@ -50,8 +53,24 @@ namespace UserVoice.Service.Queries
     public class ListItems : Query<ListItemsResult>
     {
         public ListItems() : base(
-            @"WITH [source] AS (
-                SELECT [i].*, [c].[ItemStatus], [c].[Body] AS [StatusBody], COALESCE([c].[DateModified], [c].[DateCreated]) AS [StatusDate]
+            @"DECLARE @latestCommentIds TABLE (
+                [ItemId] int NOT NULL PRIMARY KEY,
+                [CommentId] int NOT NULL
+            );
+
+            INSERT INTO @latestCommentIds (
+                [ItemId], [CommentId]
+            ) SELECT
+                [ItemId], MAX([Id]) AS [LatestCommentId]
+            FROM 
+                [uservoice].[Comment]
+            GROUP BY 
+                [ItemId];
+
+            WITH [source] AS (
+                SELECT 
+                    [i].*, 
+                    [c].[ItemStatus], [c].[Body] AS [StatusBody], COALESCE([c].[DateModified], [c].[DateCreated]) AS [StatusDate]
                 FROM 
                     [uservoice].[Item] [i]
                     LEFT JOIN [uservoice].[Comment] [c] ON [i].[StatusCommentId]=[c].[Id]
@@ -60,7 +79,8 @@ namespace UserVoice.Service.Queries
                 SELECT 
                     [src].*, 
                     COALESCE([votes].[TotalUpvotes], 0) AS [TotalUpvotes],
-                    COALESCE([votes].[TotalDownvotes], 0) AS [TotalDownvotes]
+                    COALESCE([votes].[TotalDownvotes], 0) AS [TotalDownvotes],
+                    [lc].[LatestCommentDate], [lc].[LatestCommentUser]
                 FROM 
                     [source] [src]
                     LEFT JOIN (
@@ -71,10 +91,15 @@ namespace UserVoice.Service.Queries
                         FROM [uservoice].[Vote] [v]
                         GROUP BY [v].[ItemId]
                     ) [votes] ON [src].[Id]=[votes].[ItemId]
+                    LEFT JOIN (
+                        SELECT [c].[ItemId], [c].[DateCreated] AS [LatestCommentDate], [c].[CreatedBy] AS [LatestCommentUser]
+                        FROM @latestCommentIds [lc]
+                        INNER JOIN [uservoice].[Comment] [c] ON [lc].[CommentId]=[c].[Id]
+                    ) [lc] ON [src].[Id]=[lc].[ItemId]
             ) SELECT 
                 [i].*, 
                 COALESCE([i].[TotalUpvotes], 0) + COALESCE([i].[TotalDownvotes], 0) AS [TotalVotes],
-                (SELECT COUNT(1) FROM [uservoice].[AcceptanceRequest] WHERE [ItemId]=[i].[Id]) AS [AcceptanceRequestCount]
+                (SELECT COUNT(1) FROM [uservoice].[AcceptanceRequest] WHERE [ItemId]=[i].[Id]) AS [AcceptanceRequestCount]                
             FROM 
                 [votes] [i]
             ORDER BY 
@@ -99,6 +124,7 @@ namespace UserVoice.Service.Queries
         [OrderBy(ListItemsSortOptions.LatestStatusChange, "[StatusDate] DESC")]
         [OrderBy(ListItemsSortOptions.MostVotes, "[TotalVotes] DESC")]
         [OrderBy(ListItemsSortOptions.MostUpvoted, "[TotalUpvotes] DESC")]
+        [OrderBy(ListItemsSortOptions.LatestComment, "[LatestCommentDate] DESC")]
         public ListItemsSortOptions Sort { get; set; } = ListItemsSortOptions.LatestModifedOrAdded;
     }
 }

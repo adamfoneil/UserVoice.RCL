@@ -21,6 +21,11 @@
             <RadzenButton Text="Show All" Click="@(async () => { query.Response = null; query.Type = null; await Refresh(); })"/>
         </div>
     }
+
+    <div class="mx-3 d-flex align-items-center">
+        <div class="mr-2 me-2">Sort By:</div>
+        <RadzenDropDown Data="@(Dropdown.FromEnum<ListItemsSortOptions>())" ValueProperty="Key" TextProperty="Value" @bind-Value="@query.Sort" Change="@Refresh"/>
+    </div>
 </div>
 
 @if (query.Type == ItemType.TestCase)
