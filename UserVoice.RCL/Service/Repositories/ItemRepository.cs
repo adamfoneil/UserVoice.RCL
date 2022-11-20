@@ -14,9 +14,9 @@ namespace UserVoice.RCL.Service.Repositories
 
         protected override async Task AfterSaveAsync(IDbConnection connection, SaveAction action, Item model, IDbTransaction txn = null)
         {
-            if (action == SaveAction.Insert && model.AssignToUserId.HasValue)
+            if (model.AssignToUserId.HasValue)
             {
-                await ((UserVoiceDataContext)Context).AcceptanceRequests.SaveAsync(new AcceptanceRequest()
+                await ((UserVoiceDataContext)Context).AcceptanceRequests.MergeAsync(new AcceptanceRequest()
                 {
                     ItemId = model.Id,
                     UserId = model.AssignToUserId.Value,

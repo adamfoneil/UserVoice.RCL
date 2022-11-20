@@ -1,11 +1,11 @@
 ﻿@inject UserVoiceDataContext Data
 
-<EditForm Model="@item" OnSubmit="OnSubmit">
+<EditForm Model="@Model" OnSubmit="OnSubmit">
     <DataAnnotationsValidator/>
 
     <div class="d-flex mb-2">
         <div class="col-2 me-1">            
-            <RadzenDropDown Data="@(Dropdown.FromEnum<ItemType>())" TValue="ItemType" ValueProperty="Key" TextProperty="Value" @bind-Value="@item.Type" class="w-100">
+            <RadzenDropDown Data="@(Dropdown.FromEnum<ItemType>())" TValue="ItemType" ValueProperty="Key" TextProperty="Value" @bind-Value="@Model.Type" class="w-100">
                 <Template Context="item">
                     <div class="d-flex align-items-center">
                         <RadzenIcon Icon="@Data.TypeInfo[item.Key].Icon" class="me-2" Style="@Data.TypeInfo[item.Key].Style" />
@@ -13,18 +13,18 @@
                     </div>                    
                 </Template>
             </RadzenDropDown>            
-            <ValidationMessage For="@(() => item.Type)" />
+            <ValidationMessage For="@(() => Model.Type)" />
         </div>
 
         <div class="col-10 ms-1">
-            <RadzenTextBox @bind-Value="@item.Title" MaxLength="255" class="w-100 pl-1" Placeholder="Title" />
-            <ValidationMessage For="@(() => item.Title)" />            
+            <RadzenTextBox @bind-Value="@Model.Title" MaxLength="255" class="w-100 pl-1" Placeholder="Title" />
+            <ValidationMessage For="@(() => Model.Title)" />            
         </div>
     </div>
   
     <div>
-        <ValidationMessage For="@(() => item.Body)" />
-        <RadzenHtmlEditor @bind-Value="@item.Body" Style="min-height:200px" class="w-100">
+        <ValidationMessage For="@(() => Model.Body)" />
+        <RadzenHtmlEditor @bind-Value="@Model.Body" Style="min-height:200px" class="w-100">
             <RadzenHtmlEditorUndo />
             <RadzenHtmlEditorRedo />
             <RadzenHtmlEditorSeparator />
@@ -41,10 +41,10 @@
     </div>
     
     <div class="my-2 d-flex align-items-center justify-content-between">
-        @if ((CurrentUser?.MayAssignAcceptanceRequests ?? false) && item.Type == ItemType.TestCase)
+        @if ((CurrentUser?.MayAssignAcceptanceRequests ?? false) && Model.Type == ItemType.TestCase)
         {
             <FormField Label="Assign To:" LabelColumns="4">
-                <RadzenDropDown @bind-Value="@item.AssignToUserId" Data="users" ValueProperty="Id" TextProperty="Name"/>
+                <RadzenDropDown @bind-Value="@Model.AssignToUserId" Data="users" ValueProperty="Id" TextProperty="Name"/>
             </FormField>
         }
 
@@ -57,7 +57,6 @@
 </EditForm>
 
 @code {
-    Item item = DefaultItem();
     Spinner? spinner;
     IEnumerable<User> users = Enumerable.Empty<User>();
 
@@ -66,6 +65,12 @@
 
     [Parameter]
     public EventCallback<Item> ItemSaved { get; set; }
+
+    [Parameter]
+    public Item Model { get; set; } = new();
+
+    [Parameter]
+    public ItemType DefaultType { get; set; } = ItemType.Issue;
 
     protected override async Task OnInitializedAsync()
     {
@@ -79,12 +84,10 @@
         spinner?.Show();
 
         Data.User = CurrentUser ?? throw new ApplicationException("CurrentUser is required");
-        await Data.Items.SaveAsync(item);
-        await ItemSaved.InvokeAsync(item);
-        item = DefaultItem();
+        await Data.Items.SaveAsync(Model);
+        await ItemSaved.InvokeAsync(Model);
+        Model = new() { Type = DefaultType };
 
         spinner?.Hide();
     }
-
-    static Item DefaultItem() => new Item() { Type = ItemType.Issue };
 }

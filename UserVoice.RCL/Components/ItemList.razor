@@ -107,14 +107,31 @@
         {
             <div class="ml-5 ms-5 mt-2">
                 <RadzenCard>
-                    @ToMarkup(row.Body)
-
+                    @if (edit.IsSet(row.Id))
+                    {
+                        <ItemForm Model="row" ItemSaved="@(async () => { edit[row.Id] = false; await Refresh(); })" CurrentUser="@CurrentUser"/>
+                    }
+                    else
+                    {
+                        @ToMarkup(row.Body)
+                    }
+                    
                     @if (row.CreatedBy?.Equals(CurrentUser?.Name) ?? false)
                     {
                         <hr/>
                         <div class="d-flex align-items-center">
                             <RadzenCheckBox @bind-Value="@row.IsActive" Change="@((val) => OnActiveChange(row))" TValue="bool"/>
                             <span @onclick="@(async () => { row.IsActive = !row.IsActive; await OnActiveChange(row); })" style="cursor:pointer" class="ml-2 ms-2">Active</span>
+                            @if (!edit.IsSet(row.Id))
+                            {
+                                <RadzenButton Text="Edit" Icon="edit" class="ml-2 ms-2" Click="@(() => edit[row.Id] = true)" />
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center">                                    
+                                    <RadzenButton Text="Cancel" Icon="cancel" class="ml-2 ms-2" ButtonStyle="ButtonStyle.Light" Click="@(() => edit[row.Id] = false)"/>
+                                </div>                                
+                            }
                         </div>
                     }
                 </RadzenCard>                
@@ -133,7 +150,8 @@
     IEnumerable<ListItemsResult> items = Enumerable.Empty<ListItemsResult>();
     ILookup<int, Comment> comments = Enumerable.Empty<Comment>().ToLookup(row => row.ItemId);
     ILookup<int, AcceptanceRequest> acceptanceRequests = Enumerable.Empty<AcceptanceRequest>().ToLookup(row => row.ItemId);
-    Dictionary<int, bool> expand = new();    
+    Dictionary<int, bool> expand = new();
+    Dictionary<int, bool> edit = new();
     IEnumerable<User> users = Enumerable.Empty<User>();
     IEnumerable<AcceptanceMetricsResult> acceptanceMetrics = Enumerable.Empty<AcceptanceMetricsResult>();
 
