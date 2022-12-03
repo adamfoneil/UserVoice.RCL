@@ -177,6 +177,9 @@
     [Parameter]
     public User? CurrentUser { get; set; }
 
+    [Parameter]
+    public string? SearchText { get; set; }
+
     MarkupString ToMarkup(string? input) => new MarkupString(input ?? string.Empty);
 
     protected override async Task OnInitializedAsync()
@@ -192,6 +195,7 @@
 
     public async Task Refresh()
     {
+        query.Search = SearchText;
         items = await query.ExecuteAsync(Data.GetConnection);
 
         acceptanceRequests = (await new ListAcceptanceRequests()
