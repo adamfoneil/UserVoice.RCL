@@ -47,5 +47,17 @@ namespace UserVoice.Database
         public DateTime LocalTime => Timestamp.Local(TimeZoneId);
 
         public bool MayAssignAcceptanceRequests => Role.HasFlag(Role.ProductOwner) || Role.HasFlag(Role.SignOffUser);
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is User u)
+            {
+                return Email?.ToLower().Equals(u.Email.ToLower()) ?? false;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode() => Email?.ToLower().GetHashCode() ?? 0;        
     }
 }

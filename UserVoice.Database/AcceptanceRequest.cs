@@ -47,5 +47,8 @@ namespace UserVoice.Database
 
         [NotMapped]
         public string UserName { get; set; }
+
+        [NotMapped]
+        public string Email { get; set; }
     }
 }

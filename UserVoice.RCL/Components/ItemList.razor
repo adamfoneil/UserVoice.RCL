@@ -124,19 +124,26 @@
                     @if (row.CreatedBy?.Equals(CurrentUser?.Name) ?? false)
                     {
                         <hr/>
-                        <div class="d-flex align-items-center">
-                            <RadzenCheckBox @bind-Value="@row.IsActive" Change="@((val) => OnActiveChange(row))" TValue="bool"/>
-                            <span @onclick="@(async () => { row.IsActive = !row.IsActive; await OnActiveChange(row); })" style="cursor:pointer" class="ml-2 ms-2">Active</span>
-                            @if (!edit.IsSet(row.Id))
-                            {
-                                <RadzenButton Text="Edit" Icon="edit" class="ml-2 ms-2" Click="@(() => edit[row.Id] = true)" />
-                            }
-                            else
-                            {
-                                <div class="d-flex align-items-center">                                    
-                                    <RadzenButton Text="Cancel" Icon="cancel" class="ml-2 ms-2" ButtonStyle="ButtonStyle.Light" Click="@(() => edit[row.Id] = false)"/>
-                                </div>                                
-                            }
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <RadzenCheckBox @bind-Value="@row.IsActive" Change="@((val) => OnActiveChange(row))" TValue="bool" />
+                                <span @onclick="@(async () => { row.IsActive = !row.IsActive; await OnActiveChange(row); })" style="cursor:pointer" class="ml-2 ms-2">Active</span>
+                                @if (!edit.IsSet(row.Id))
+                                {
+                                    <RadzenButton Text="Edit" Icon="edit" class="ml-2 ms-2" Click="@(() => edit[row.Id] = true)" />
+                                }
+                                else
+                                {
+                                    <div class="d-flex align-items-center">
+                                        <RadzenButton Text="Cancel" Icon="cancel" class="ml-2 ms-2" ButtonStyle="ButtonStyle.Light" Click="@(() => edit[row.Id] = false)" />
+                                    </div>
+                                }
+                            </div>
+                            <div class="mr-3 me-3">
+                                <FormField Label="Assign To:" LabelColumns="4">
+                                    <RadzenDropDown Data="@users.Except(acceptanceRequests[row.Id].Select(ar => new User() { Name = ar.UserName, Email = ar.Email }))" ValueProperty="Id" TextProperty="Name" TValue="int?" AllowClear="true" Change="@((val) => CreateAcceptanceRequest(val, row.Id))" />
+                                </FormField>
+                            </div>
                         </div>
                     }
                 </RadzenCard>                

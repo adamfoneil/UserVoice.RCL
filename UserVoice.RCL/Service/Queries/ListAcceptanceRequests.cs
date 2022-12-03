@@ -9,7 +9,7 @@ namespace UserVoice.Service.Queries
     {
         public ListAcceptanceRequests() : base(
             @"SELECT 
-                [ar].*, [u].[Name] AS [UserName]
+                [ar].*, [u].[Name] AS [UserName], [u].[Email]
             FROM
                 [uservoice].[AcceptanceRequest] [ar]
                 INNER JOIN [uservoice].[User] [u] ON [ar].[UserId]=[u].[Id]
