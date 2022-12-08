@@ -108,11 +108,11 @@
                 }
             </div>            
         </div>
-        @if (expand[row.Id])
+        @if (expand.IsTrue(row.Id))
         {
             <div class="ml-5 ms-5 mt-2">
                 <RadzenCard>
-                    @if (edit.IsSet(row.Id))
+                    @if (edit.IsTrue(row.Id))
                     {
                         <ItemForm Model="row" ItemSaved="@(async () => { edit[row.Id] = false; await Refresh(); })" CurrentUser="@CurrentUser"/>
                     }
@@ -128,7 +128,7 @@
                             <div>
                                 <RadzenCheckBox @bind-Value="@row.IsActive" Change="@((val) => OnActiveChange(row))" TValue="bool" />
                                 <span @onclick="@(async () => { row.IsActive = !row.IsActive; await OnActiveChange(row); })" style="cursor:pointer" class="ml-2 ms-2">Active</span>
-                                @if (!edit.IsSet(row.Id))
+                                @if (!edit.IsTrue(row.Id))
                                 {
                                     <RadzenButton Text="Edit" Icon="edit" class="ml-2 ms-2" Click="@(() => edit[row.Id] = true)" />
                                 }

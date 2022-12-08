@@ -12,6 +12,6 @@
             return false;
         }
 
-        internal static bool IsSet<TKey>(this Dictionary<TKey, bool> dictionary, TKey key) where TKey : struct => IsSet(dictionary, key, (val) => val);
+        internal static bool IsTrue<TKey>(this Dictionary<TKey, bool> dictionary, TKey key) where TKey : struct => IsSet(dictionary, key, (val) => val);
     }
 }
