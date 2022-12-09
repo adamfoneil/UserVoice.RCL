@@ -9,7 +9,7 @@
             <strong>@comment.CreatedBy</strong>
             <span class="text-muted ml-2 ms-2">@comment.DateCreated.ElapsedRelative(DateTime.Now)</span>
             <div>
-                @comment.Body
+                @comment.Body.ToMarkup()
             </div>
         </li>
     }

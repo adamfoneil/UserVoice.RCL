@@ -118,7 +118,7 @@
                     }
                     else
                     {
-                        @ToMarkup(row.Body)
+                        @row.Body.ToMarkup()
                     }
                     
                     @if (row.CreatedBy?.Equals(CurrentUser?.Name) ?? false)
@@ -178,9 +178,7 @@
     public User? CurrentUser { get; set; }
 
     [Parameter]
-    public string? SearchText { get; set; }
-
-    MarkupString ToMarkup(string? input) => new MarkupString(input ?? string.Empty);
+    public string? SearchText { get; set; }    
 
     protected override async Task OnInitializedAsync()
     {
