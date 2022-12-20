@@ -19,7 +19,11 @@ namespace UserVoice.Database
         /// <summary>
         /// describes functionality seeking end-user sign off as part of a release
         /// </summary>
-        TestCase = 3
+        TestCase = 3,
+        /// <summary>
+        /// describes newly-released functionality
+        /// </summary>
+        ReleaseNote = 4
     }
 
     public class Item : BaseEntity
@@ -50,7 +54,7 @@ namespace UserVoice.Database
 
         public static Dictionary<Role, IEnumerable<ItemType>> AllowedTypes => new Dictionary<Role, IEnumerable<ItemType>>()
         {
-            [Role.ProductOwner] = new[] { ItemType.FeatureIdea, ItemType.TestCase, ItemType.Issue },            
+            [Role.ProductOwner] = new[] { ItemType.FeatureIdea, ItemType.TestCase, ItemType.Issue, ItemType.ReleaseNote },
             [Role.User] = new[] { ItemType.FeatureIdea, ItemType.Issue },
             [Role.SignOffUser] = new[] { ItemType.FeatureIdea, ItemType.Issue, ItemType.TestCase }
         };

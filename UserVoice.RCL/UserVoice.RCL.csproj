@@ -43,7 +43,7 @@
     <PackageReference Include="AO.Models" Version="1.1.47" />
     <PackageReference Include="Dapper.QX" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
-    <PackageReference Include="Radzen.Blazor" Version="4.2.2" />
+    <PackageReference Include="Radzen.Blazor" Version="4.4.7" />
   </ItemGroup>
 
   <ItemGroup>

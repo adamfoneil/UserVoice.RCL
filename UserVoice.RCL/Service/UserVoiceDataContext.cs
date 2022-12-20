@@ -56,7 +56,8 @@ namespace UserVoice.Service
         {
             [ItemType.Issue] = new("feedback", "color:maroon", "Issue", "Issues"),
             [ItemType.FeatureIdea] = new("lightbulb", "color:darkgreen", "Feature/Idea", "Features/Ideas"),
-            [ItemType.TestCase] = new("science", "color:#cc33ff", "Test Case", "Test Cases")
+            [ItemType.TestCase] = new("science", "color:#cc33ff", "Test Case", "Test Cases"),
+            [ItemType.ReleaseNote] = new("campaign", "color:#FFB12E", "Release Note", "Release Notes")
         };
 
         public struct ItemTypeInfo
