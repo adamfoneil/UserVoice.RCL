@@ -48,6 +48,7 @@ namespace UserVoice.Database
 
         public bool MayAssignAcceptanceRequests => Role.HasFlag(Role.ProductOwner) || Role.HasFlag(Role.SignOffUser);
 
+#if NET6_0_OR_GREATER
         public override bool Equals(object? obj)
         {
             if (obj is User u)
@@ -59,5 +60,6 @@ namespace UserVoice.Database
         }
 
         public override int GetHashCode() => Email?.ToLower().GetHashCode() ?? 0;        
+#endif
     }
 }
