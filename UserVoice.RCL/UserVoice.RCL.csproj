@@ -24,6 +24,7 @@
     <Compile Include="..\UserVoice.Database\Comment.cs" Link="Database\Comment.cs" />
     <Compile Include="..\UserVoice.Database\Conventions\BaseEntity.cs" Link="Database\Conventions\BaseEntity.cs" />
     <Compile Include="..\UserVoice.Database\Item.cs" Link="Database\Item.cs" />
+    <Compile Include="..\UserVoice.Database\ReleaseNoteMarker.cs" Link="Database\ReleaseNoteMarker.cs" />
     <Compile Include="..\UserVoice.Database\User.cs" Link="Database\User.cs" />
     <Compile Include="..\UserVoice.Database\Vote.cs" Link="Database\Vote.cs" />
   </ItemGroup>

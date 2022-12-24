@@ -81,6 +81,16 @@ CREATE TABLE [uservoice].[Vote] (
 
 GO
 
+CREATE TABLE [uservoice].[ReleaseNoteMarker] (
+    [Id] int identity(1,1)  NOT NULL,
+    [UserName] nvarchar(50)   NOT NULL,
+    [VisibleAfter] datetime   NOT NULL,
+    CONSTRAINT [PK_uservoiceReleaseNoteMarker] PRIMARY KEY ([UserName] ASC),
+    CONSTRAINT [U_uservoiceReleaseNoteMarker_Id] UNIQUE ([Id] ASC)
+)
+
+GO
+
 ALTER TABLE [uservoice].[AcceptanceRequest] ADD CONSTRAINT [FK_uservoiceAcceptanceRequest_ItemId] FOREIGN KEY ([ItemId]) REFERENCES [uservoice].[Item] ([Id])
 
 GO
