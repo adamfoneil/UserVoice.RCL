@@ -27,12 +27,11 @@
     }
 </ul>
 
-
 <div class="d-flex justify-content-between mb-3">
     @if (ViewAllLink is not null)
     {
         <div>
-            <a href="@ViewAllLink">View All Changes</a>
+            <a href="@ViewAllLink">View Changelog</a>
         </div>        
     }
     
@@ -58,7 +57,7 @@
     public Func<Item, string>? ItemLinkTemplate { get; set; }
 
     [Parameter]
-    public string ViewAllLink { get; set; }
+    public string ViewAllLink { get; set; } = default!;
 
     protected override async Task OnInitializedAsync() => await Refresh();
 

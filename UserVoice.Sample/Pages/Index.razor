@@ -3,7 +3,7 @@
 <PageTitle>Index</PageTitle>
 
 <div class="container">    
-    <ReleaseNotesList CurrentUser="@user" ItemLinkTemplate="ItemLink" ViewAllLink="/Changelog"/>
+    <ReleaseNotesCompactList CurrentUser="@user" ItemLinkTemplate="ItemLink" ViewAllLink="/Changelog"/>
 
     <ItemList @ref="list" CurrentUser="@user">
         <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />

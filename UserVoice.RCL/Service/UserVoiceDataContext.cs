@@ -12,7 +12,7 @@ using UserVoice.Service.Repositories;
 
 namespace UserVoice.Service
 {
-    public class UserVoiceDataContext : SqlServerContext<User>
+    public partial class UserVoiceDataContext : SqlServerContext<User>
     {
         public UserVoiceDataContext(IOptions<ConnectionStrings> options, ILogger<UserVoiceDataContext> logger) : base(options.Value.UserVoice, logger)
         {
