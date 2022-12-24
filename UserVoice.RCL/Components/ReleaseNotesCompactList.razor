@@ -10,7 +10,7 @@
                     <RadzenIcon Icon="campaign" Style="@Data.TypeInfo[ItemType.ReleaseNote].Style"/>
                 </div>
                 <div>
-                    <div class="text-muted small">@item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
+                    <div class="text-muted small">@item.DateCreated.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now)</div>
                     <div>
                         @if (ItemLinkTemplate is null)
                         {
@@ -49,9 +49,6 @@
 
     [Parameter]
     public int? Top { get; set; }
-
-    [Parameter]
-    public DateTime? LocalTime { get; set; }
 
     [Parameter]
     public Func<Item, string>? ItemLinkTemplate { get; set; }
