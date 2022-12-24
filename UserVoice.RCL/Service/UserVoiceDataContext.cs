@@ -33,6 +33,7 @@ namespace UserVoice.Service
         public ItemRepository Items => new ItemRepository(this);
         public BaseRepository<Vote> Votes => new BaseRepository<Vote>(this);
         public UserRepository Users => new UserRepository(this);
+        public ReleaseNoteMarkerRepository ReleaseNoteMarkers => new ReleaseNoteMarkerRepository(this);
 
         public async Task CreateSchemaIfNotExistsAsync()
         {

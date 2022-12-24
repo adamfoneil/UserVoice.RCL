@@ -1,7 +1,4 @@
 ﻿@using UserVoice.RCL.Service.Queries;
-@using UserVoice.Service
-@using UserVoice.Database
-@using UserVoice.RCL.Extensions
 @inject UserVoiceDataContext Data
 
 <ul class="list-group list-group-flush my-2">
@@ -10,10 +7,10 @@
         <li class="my-1 list-group-item">
             <div class="d-flex align-items-start">
                 <div class="mr-3 me-3">
-                    <RadzenIcon Icon="campaign"/>
+                    <RadzenIcon Icon="campaign" Style="@Data.TypeInfo[ItemType.ReleaseNote].Style"/>
                 </div>
                 <div>
-                    <div class="text-muted">@item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
+                    <div class="text-muted small">@item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
                     <div>@item.Title</div>
                 </div>
             </div>            
@@ -21,11 +18,18 @@
     }
 </ul>
 
+@if (items.Any())
+{
+    <div class="d-flex flex-row-reverse mb-3">
+        <RadzenButton Text="Dismiss" Click="DismissItems" />
+    </div>
+}
+
 @code {
     IEnumerable<Item> items = Enumerable.Empty<Item>();
 
     [Parameter]
-    public string UserName { get; set; } = default!;
+    public User? CurrentUser { get; set; }
 
     [Parameter]
     public int? Top { get; set; }
@@ -33,12 +37,21 @@
     [Parameter]
     public DateTime? LocalTime { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() => await Refresh();
+
+    async Task Refresh()
     {
         items = await new MyReleaseNotes()
         {
-            UserName = UserName,
+            UserName = CurrentUser?.Name ?? "system",
             Top = Top
         }.ExecuteAsync(Data.GetConnection);
+    }
+
+    async Task DismissItems()
+    {
+        await Data.ReleaseNoteMarkers.MarkNowAsync(CurrentUser ?? throw new Exception("CurrentUser must be set"));
+        await Refresh();
+        StateHasChanged();
     }
 }
