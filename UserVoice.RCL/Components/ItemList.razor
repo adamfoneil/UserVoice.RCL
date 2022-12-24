@@ -26,6 +26,10 @@
         <div class="mr-2 me-2">Sort By:</div>
         <RadzenDropDown Data="@(Dropdown.FromEnum<ListItemsSortOptions>())" ValueProperty="Key" TextProperty="Value" @bind-Value="@query.Sort" Change="@Refresh"/>
     </div>
+
+    <div class="mx-3">
+        <Pager @bind-Value="@query.Page" Change="Refresh"/>
+    </div>
 </div>
 
 @if (query.Type == ItemType.TestCase)
