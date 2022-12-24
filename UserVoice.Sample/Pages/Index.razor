@@ -3,7 +3,7 @@
 <PageTitle>Index</PageTitle>
 
 <div class="container">    
-    <ReleaseNotesList CurrentUser="@user"/>
+    <ReleaseNotesList CurrentUser="@user" ItemLinkTemplate="ItemLink" ViewAllLink="/Changelog"/>
 
     <ItemList @ref="list" CurrentUser="@user">
         <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
@@ -30,4 +30,6 @@
     {
         await list.Refresh();
     }
+
+    string ItemLink(Database.Item item) => $"/Changelog/{item.Id}";
 }
