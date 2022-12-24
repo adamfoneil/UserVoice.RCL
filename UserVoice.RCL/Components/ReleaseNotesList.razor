@@ -1,0 +1,44 @@
+﻿@using UserVoice.RCL.Service.Queries;
+@using UserVoice.Service
+@using UserVoice.Database
+@using UserVoice.RCL.Extensions
+@inject UserVoiceDataContext Data
+
+<ul class="list-group list-group-flush my-2">
+    @foreach (var item in items)
+    {
+        <li class="my-1 list-group-item">
+            <div class="d-flex align-items-start">
+                <div class="mr-3 me-3">
+                    <RadzenIcon Icon="campaign"/>
+                </div>
+                <div>
+                    <div class="text-muted">@item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
+                    <div>@item.Title</div>
+                </div>
+            </div>            
+        </li>
+    }
+</ul>
+
+@code {
+    IEnumerable<Item> items = Enumerable.Empty<Item>();
+
+    [Parameter]
+    public string UserName { get; set; } = default!;
+
+    [Parameter]
+    public int? Top { get; set; }
+
+    [Parameter]
+    public DateTime? LocalTime { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await new MyReleaseNotes()
+        {
+            UserName = UserName,
+            Top = Top
+        }.ExecuteAsync(Data.GetConnection);
+    }
+}
