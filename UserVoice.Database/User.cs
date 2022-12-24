@@ -37,7 +37,7 @@ namespace UserVoice.Database
         [MaxLength(50)]
         public string Email { get; set; }
 
-        public Role Role { get; set; }
+        public Role Role { get; set; } = Role.User;
 
         [MaxLength(50)]
         public string TimeZoneId { get; set; }
