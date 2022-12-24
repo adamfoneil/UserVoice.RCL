@@ -11,8 +11,10 @@
     <Copyright>Copyright (c) 2022 Adam O'Neil</Copyright>
     <PackageProjectUrl>https://github.com/adamfoneil/UserVoice.RCL</PackageProjectUrl>
     <Authors>Adam O'Neil</Authors>
-    <Version>1.0.16</Version>
+    <Version>1.0.17</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
