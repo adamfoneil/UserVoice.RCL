@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using UserVoice.Database.Conventions;
 
 namespace UserVoice.Database
@@ -65,6 +66,5 @@ namespace UserVoice.Database
                 .Where(item => roleFlags.HasFlag(item.Role))
                 .Select(item => item.Type)
                 .Distinct();
-
     }
 }

@@ -60,6 +60,12 @@
         </div>
     </div>    
 
+    @if (ShowCurrentUser)
+    {
+        <div>
+            <span>@CurrentUser.Name | @CurrentUser.Role.ToString()</span>
+        </div>    
+    }
 </EditForm>
 
 @code {
@@ -69,6 +75,9 @@
 
     [Parameter]
     public User? CurrentUser { get; set; }
+
+    [Parameter]
+    public bool ShowCurrentUser { get; set; }
 
     [Parameter]
     public EventCallback<Item> ItemSaved { get; set; }
