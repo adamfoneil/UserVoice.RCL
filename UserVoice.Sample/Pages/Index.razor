@@ -2,9 +2,10 @@
 
 <PageTitle>Index</PageTitle>
 
-<div class="container">
-    <ItemList @ref="list" CurrentUser="@user"/>
-    <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
+<div class="container">    
+    <ItemList @ref="list" CurrentUser="@user">
+        <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
+    </ItemList>
 </div>
 
 @code {

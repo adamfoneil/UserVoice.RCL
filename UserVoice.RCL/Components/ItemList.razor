@@ -49,6 +49,8 @@
     </div>
 }
 
+@ChildContent
+
 <RadzenDataList Data="@items">
     <Template Context="row">        
         <div class="d-flex justify-content-between">
@@ -143,11 +145,15 @@
                                     </div>
                                 }
                             </div>
-                            <div class="mr-3 me-3">
-                                <FormField Label="Assign To:" LabelColumns="4">
-                                    <RadzenDropDown Data="@users.Except(acceptanceRequests[row.Id].Select(ar => new User() { Name = ar.UserName, Email = ar.Email }))" ValueProperty="Id" TextProperty="Name" TValue="int?" AllowClear="true" Change="@((val) => CreateAcceptanceRequest(val, row.Id))" />
-                                </FormField>
-                            </div>
+
+                            @if (row.Type == ItemType.TestCase)
+                            {
+                                <div class="mr-3 me-3">
+                                    <FormField Label="Assign To:" LabelColumns="4">
+                                        <RadzenDropDown Data="@users.Except(acceptanceRequests[row.Id].Select(ar => new User() { Name = ar.UserName, Email = ar.Email }))" ValueProperty="Id" TextProperty="Name" TValue="int?" AllowClear="true" Change="@((val) => CreateAcceptanceRequest(val, row.Id))" />
+                                    </FormField>
+                                </div>
+                            }                            
                         </div>
                     }
                 </RadzenCard>                
@@ -183,6 +189,9 @@
 
     [Parameter]
     public string? SearchText { get; set; }    
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

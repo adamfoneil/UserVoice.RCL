@@ -1,4 +1,5 @@
 ﻿@inject UserVoiceDataContext Data
+@inject DialogService Dialog
 
 <EditForm Model="@Model" OnSubmit="OnSubmit">
     <DataAnnotationsValidator/>
@@ -37,6 +38,9 @@
             <RadzenHtmlEditorColor />
             <RadzenHtmlEditorBackground />
             <RadzenHtmlEditorRemoveFormat />            
+            <RadzenHtmlEditorSeparator/>
+            <RadzenHtmlEditorLink/>
+            <RadzenHtmlEditorUnlink />
         </RadzenHtmlEditor>
     </div>
     

@@ -1,3 +1,4 @@
+using Radzen;
 using UserVoice.Service;
 using UserVoice.Service.Models;
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
 builder.Services.AddScoped<UserVoiceDataContext>();
+builder.Services.AddScoped<DialogService>();
 
 var app = builder.Build();
 

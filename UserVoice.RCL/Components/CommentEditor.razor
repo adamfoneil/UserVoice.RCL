@@ -1,5 +1,6 @@
 ﻿@using CopyObjectLibrary
 @inject UserVoiceDataContext Data
+@inject DialogService Dialog
 @using Dapper.QX.Extensions
 
 <ul class="list-group">
@@ -31,6 +32,9 @@
                 <RadzenHtmlEditorColor />
                 <RadzenHtmlEditorBackground />
                 <RadzenHtmlEditorRemoveFormat />
+                <RadzenHtmlEditorSeparator />
+                <RadzenHtmlEditorLink />
+                <RadzenHtmlEditorUnlink/>
             </RadzenHtmlEditor>
             
             <div class="d-flex justify-content-between mt-2">
