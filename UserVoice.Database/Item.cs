@@ -58,5 +58,13 @@ namespace UserVoice.Database
             [Role.User] = new[] { ItemType.FeatureIdea, ItemType.Issue },
             [Role.SignOffUser] = new[] { ItemType.FeatureIdea, ItemType.Issue, ItemType.TestCase }
         };
+
+        public static IEnumerable<ItemType> GetAllowedTypes(Role roleFlags) => 
+            AllowedTypes
+                .SelectMany(kp => kp.Value, (kp, type) => new { Role = kp.Key, Type = type })
+                .Where(item => roleFlags.HasFlag(item.Role))
+                .Select(item => item.Type)
+                .Distinct();
+
     }
 }

@@ -81,7 +81,7 @@
 
     protected override async Task OnInitializedAsync()
     {        
-        allowedTypes = Item.AllowedTypes[CurrentUser?.Role ?? Role.User].ToDictionary(it => it, it => Dropdown.FormatEnumName(it.ToString()));
+        allowedTypes = Item.GetAllowedTypes(CurrentUser.Role).ToDictionary(it => it, it => Dropdown.FormatEnumName(it.ToString()));
         users = await new ListUsers() { Role = Role.SignOffUser }.ExecuteAsync(Data.GetConnection);
     }
 
