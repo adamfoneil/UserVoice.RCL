@@ -24,6 +24,7 @@
     <Compile Include="..\UserVoice.Database\Comment.cs" Link="Database\Comment.cs" />
     <Compile Include="..\UserVoice.Database\Conventions\BaseEntity.cs" Link="Database\Conventions\BaseEntity.cs" />
     <Compile Include="..\UserVoice.Database\Item.cs" Link="Database\Item.cs" />
+    <Compile Include="..\UserVoice.Database\ReleaseNoteMarker.cs" Link="Database\ReleaseNoteMarker.cs" />
     <Compile Include="..\UserVoice.Database\User.cs" Link="Database\User.cs" />
     <Compile Include="..\UserVoice.Database\Vote.cs" Link="Database\Vote.cs" />
   </ItemGroup>
@@ -43,7 +44,7 @@
     <PackageReference Include="AO.Models" Version="1.1.47" />
     <PackageReference Include="Dapper.QX" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
-    <PackageReference Include="Radzen.Blazor" Version="4.2.2" />
+    <PackageReference Include="Radzen.Blazor" Version="4.4.7" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,7 +19,7 @@
         /// <summary>
         /// put a space before capital letters
         /// </summary>
-        private static string FormatEnumName(string name) =>
+        public static string FormatEnumName(string name) =>
             string.Join(string.Empty, name.Select((c, index) => (char.IsUpper(c) && index > 0) ? $" {c}" : c.ToString()));
     }
 }

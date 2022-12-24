@@ -1,0 +1,23 @@
+﻿<div class="d-flex align-items-center">
+    <RadzenButton Icon="chevron_left" Click="@(() => OnClick(-1))" Disabled="@(Value <= 0)"/>
+    <div class="mx-2">@(Value + 1)</div>
+    <RadzenButton Icon="chevron_right" Click="@(() => OnClick(1))"/>
+</div>
+
+@code {
+    [Parameter]
+    public int? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<int?> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<int?> Change { get; set; }
+
+    async Task OnClick(int add)
+    {
+        Value += add;
+        await ValueChanged.InvokeAsync(Value);
+        await Change.InvokeAsync(Value);
+    }
+}

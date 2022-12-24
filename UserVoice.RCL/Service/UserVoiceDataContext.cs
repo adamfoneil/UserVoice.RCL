@@ -12,7 +12,7 @@ using UserVoice.Service.Repositories;
 
 namespace UserVoice.Service
 {
-    public class UserVoiceDataContext : SqlServerContext<User>
+    public partial class UserVoiceDataContext : SqlServerContext<User>
     {
         public UserVoiceDataContext(IOptions<ConnectionStrings> options, ILogger<UserVoiceDataContext> logger) : base(options.Value.UserVoice, logger)
         {
@@ -33,6 +33,7 @@ namespace UserVoice.Service
         public ItemRepository Items => new ItemRepository(this);
         public BaseRepository<Vote> Votes => new BaseRepository<Vote>(this);
         public UserRepository Users => new UserRepository(this);
+        public ReleaseNoteMarkerRepository ReleaseNoteMarkers => new ReleaseNoteMarkerRepository(this);
 
         public async Task CreateSchemaIfNotExistsAsync()
         {
@@ -56,7 +57,8 @@ namespace UserVoice.Service
         {
             [ItemType.Issue] = new("feedback", "color:maroon", "Issue", "Issues"),
             [ItemType.FeatureIdea] = new("lightbulb", "color:darkgreen", "Feature/Idea", "Features/Ideas"),
-            [ItemType.TestCase] = new("science", "color:#cc33ff", "Test Case", "Test Cases")
+            [ItemType.TestCase] = new("science", "color:#cc33ff", "Test Case", "Test Cases"),
+            [ItemType.ReleaseNote] = new("campaign", "color:#FF9025", "Release Note", "Release Notes")
         };
 
         public struct ItemTypeInfo

@@ -2,9 +2,12 @@
 
 <PageTitle>Index</PageTitle>
 
-<div class="container">
-    <ItemList @ref="list" CurrentUser="@user"/>
-    <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
+<div class="container">    
+    <ReleaseNotesCompactList CurrentUser="@user" ItemLinkTemplate="ItemLink" ViewAllLink="/Changelog"/>
+
+    <ItemList @ref="list" CurrentUser="@user">
+        <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" />
+    </ItemList>
 </div>
 
 @code {
@@ -27,4 +30,6 @@
     {
         await list.Refresh();
     }
+
+    string ItemLink(Database.Item item) => $"/Changelog/{item.Id}";
 }

@@ -1,11 +1,12 @@
 ﻿@inject UserVoiceDataContext Data
+@inject DialogService Dialog
 
 <EditForm Model="@Model" OnSubmit="OnSubmit">
     <DataAnnotationsValidator/>
 
     <div class="d-flex mb-2">
         <div class="col-2 me-1">            
-            <RadzenDropDown Data="@(Dropdown.FromEnum<ItemType>())" TValue="ItemType" ValueProperty="Key" TextProperty="Value" @bind-Value="@Model.Type" class="w-100">
+            <RadzenDropDown Data="@allowedTypes" TValue="ItemType" ValueProperty="Key" TextProperty="Value" @bind-Value="@Model.Type" class="w-100">
                 <Template Context="item">
                     <div class="d-flex align-items-center">
                         <RadzenIcon Icon="@Data.TypeInfo[item.Key].Icon" class="me-2" Style="@Data.TypeInfo[item.Key].Style" />
@@ -37,6 +38,11 @@
             <RadzenHtmlEditorColor />
             <RadzenHtmlEditorBackground />
             <RadzenHtmlEditorRemoveFormat />            
+            <RadzenHtmlEditorSeparator/>
+            <RadzenHtmlEditorLink/>
+            <RadzenHtmlEditorUnlink />
+            <RadzenHtmlEditorSeparator/>
+            <RadzenHtmlEditorImage/>
         </RadzenHtmlEditor>
     </div>
     
@@ -59,6 +65,7 @@
 @code {
     Spinner? spinner;
     IEnumerable<User> users = Enumerable.Empty<User>();
+    Dictionary<ItemType, string> allowedTypes = new();
 
     [Parameter]
     public User? CurrentUser { get; set; }
@@ -74,6 +81,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        allowedTypes = Item.AllowedTypes[CurrentUser?.Role ?? Role.User].ToDictionary(it => it, it => Dropdown.FormatEnumName(it.ToString()));
         users = await new ListUsers() { Role = Role.SignOffUser }.ExecuteAsync(Data.GetConnection);
     }
 

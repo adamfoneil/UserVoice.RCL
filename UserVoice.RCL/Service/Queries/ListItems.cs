@@ -103,9 +103,12 @@ namespace UserVoice.Service.Queries
             FROM 
                 [votes] [i]
             ORDER BY 
-                {orderBy}")
+                {orderBy} {offset}")
         {
         }
+
+        [Offset(30)]
+        public int? Page { get; set; } = 0;
 
         [Where("[i].[IsActive]=@isActive")]
         public bool? IsActive { get; set; } = true;

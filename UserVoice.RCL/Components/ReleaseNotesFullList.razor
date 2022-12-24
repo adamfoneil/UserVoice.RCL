@@ -1,0 +1,42 @@
+﻿@using UserVoice.RCL.Service.Queries;
+@inject UserVoiceDataContext Data
+
+<div class="d-flex flex-row-reverse">
+    <Pager @bind-Value="@query.Page" Change="@(() => Refresh(stateHasChanged: true))"/>
+</div>
+
+@foreach (var item in items)
+{
+    <div class="row">
+        <div class="col-4">
+            <h4>@item.Title</h4>
+            <div class="mt-0">
+                <div class="text-muted small">@item.DateCreated.ToString("ddd M/d") | @item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
+            </div>
+        </div>
+        <div class="col-8">
+            @item.Body.ToMarkup()
+        </div>
+    </div>
+    <hr/>
+}
+
+
+@code {
+    AllReleaseNotes query = new() { Page = 0 };
+    IEnumerable<Item> items = Enumerable.Empty<Item>();
+
+    [Parameter]
+    public DateTime? LocalTime { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    async Task Refresh(bool stateHasChanged = false)
+    {
+        items = await query.ExecuteAsync(Data.GetConnection);
+        if (stateHasChanged) StateHasChanged();
+    }
+}

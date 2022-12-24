@@ -1,0 +1,14 @@
+﻿@inject UserVoiceDataContext Data
+@page "/Changelog/{id:int?}"
+
+<div class="container">
+    <h3>Changelog</h3>
+
+    <ReleaseNotesFullList/>
+</div>
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+}
