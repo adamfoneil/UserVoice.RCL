@@ -1,4 +1,6 @@
-﻿namespace UserVoice.RCL.Extensions
+﻿using System.Xml.Linq;
+
+namespace UserVoice.RCL.Extensions
 {
     internal static class DictionaryExtensions
     {
@@ -13,5 +15,7 @@
         }
 
         internal static bool IsTrue<TKey>(this Dictionary<TKey, bool> dictionary, TKey key) where TKey : struct => IsSet(dictionary, key, (val) => val);
+
+        internal static bool HasAny<TKey, TElement>(this ILookup<TKey, TElement> lookup, TKey key) => lookup.Contains(key) && lookup[key].Any();
     }
 }

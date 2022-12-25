@@ -79,7 +79,7 @@
                     </div>                    
                 }
 
-                @if (acceptanceRequests[row.Id].Any())
+                @if (acceptanceRequests.HasAny(row.Id))
                 {
                     <div>
                         @foreach (var responseGrp in acceptanceRequests[row.Id].GroupBy(row => row.Response))
