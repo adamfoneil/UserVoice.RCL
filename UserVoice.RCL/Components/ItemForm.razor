@@ -57,15 +57,15 @@
         <div class="d-flex align-items-center">
             <button type="submit" class="btn btn-secondary">Save</button>
             <Spinner @ref="spinner" />
+            @if (ShowCurrentUser)
+            {
+                <div class="ml-2 ms-2">
+                    <span>@CurrentUser.Name | @CurrentUser.Role.ToString()</span>
+                </div>
+            }
         </div>
     </div>    
 
-    @if (ShowCurrentUser)
-    {
-        <div>
-            <span>@CurrentUser.Name | @CurrentUser.Role.ToString()</span>
-        </div>    
-    }
 </EditForm>
 
 @code {

@@ -14,7 +14,14 @@
                     <div>
                         @if (ItemLinkTemplate is null)
                         {
-                            <span>@item.Title</span>
+                            if (!string.IsNullOrEmpty(ViewAllLink))
+                            {
+                                <a href="@ViewAllLink">@item.Title</a>
+                            }
+                            else
+                            {
+                                <span>@item.Title</span>
+                            }                            
                         }
                         else
                         {
