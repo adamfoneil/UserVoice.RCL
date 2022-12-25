@@ -63,6 +63,9 @@
     [Parameter]
     public string ViewAllLink { get; set; } = default!;
 
+    [Parameter]
+    public EventCallback OnDismissed { get; set; }
+
     protected override async Task OnInitializedAsync() => await Refresh();
 
     async Task Refresh()
@@ -79,5 +82,6 @@
         await Data.ReleaseNoteMarkers.MarkNowAsync(CurrentUser ?? throw new Exception("CurrentUser must be set"));
         await Refresh();
         StateHasChanged();
+        await OnDismissed.InvokeAsync();
     }
 }
