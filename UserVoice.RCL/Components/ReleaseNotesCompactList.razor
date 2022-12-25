@@ -1,7 +1,7 @@
 ﻿@using UserVoice.RCL.Service.Queries;
 @inject UserVoiceDataContext Data
 
-<ul class="list-group list-group-flush my-2">
+<ul class="list-group list-group-flush">
     @foreach (var item in items)
     {
         <li class="my-1 list-group-item">
@@ -34,7 +34,7 @@
     }
 </ul>
 
-<div class="d-flex justify-content-between mb-3">
+<div class="d-flex justify-content-between align-items-center mt-2">
     @if (ViewAllLink is not null)
     {
         <div>
