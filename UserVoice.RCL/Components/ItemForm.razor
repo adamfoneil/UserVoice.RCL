@@ -88,9 +88,13 @@
     [Parameter]
     public ItemType DefaultType { get; set; } = ItemType.Issue;
 
-    protected override async Task OnInitializedAsync()
-    {        
-        allowedTypes = Item.GetAllowedTypes(CurrentUser.Role).ToDictionary(it => it, it => Dropdown.FormatEnumName(it.ToString()));
+    protected override async Task OnParametersSetAsync()
+    {
+        if ((CurrentUser?.Id ?? 0) != 0 && !allowedTypes.Any())
+        {
+            allowedTypes = Item.GetAllowedTypes(CurrentUser.Role).ToDictionary(it => it, it => Dropdown.FormatEnumName(it.ToString()));
+        }
+        
         users = await new ListUsers() { Role = Role.SignOffUser }.ExecuteAsync(Data.GetConnection);
     }
 
