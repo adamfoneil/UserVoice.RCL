@@ -17,7 +17,11 @@ namespace UserVoice.Service.Repositories
 
             if (action == SaveAction.Insert)
             {
-                await new InsertUnreadComments() { CommentId = model.Id }.ExecuteAsync(connection);
+                await new InsertUnreadComments() 
+                { 
+                    CommentId = model.Id,
+                    UserId = Context.User.Id
+                }.ExecuteAsync(connection);
 
                 if (model.ItemStatus.HasValue)
                 {

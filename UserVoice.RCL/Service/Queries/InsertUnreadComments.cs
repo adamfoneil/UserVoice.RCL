@@ -13,10 +13,12 @@ namespace UserVoice.RCL.Service.Queries
                 [uservoice].[User] [u]
             WHERE
                 [u].[IsActive]=1 AND
+                [u].[Id]<>@userId AND
                 NOT EXISTS(SELECT 1 FROM [uservoice].[UnreadComment] WHERE [CommentId]=@commentId AND [UserId]=[u].[Id])")
         {
         }
 
         public int CommentId { get; set; }
+        public int UserId { get; set; }
     }
 }
