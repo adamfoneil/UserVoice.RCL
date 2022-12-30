@@ -131,19 +131,10 @@
                     {
                         <hr/>
                         <div class="d-flex align-items-center justify-content-between">
-                            <div>
+                            <div class="d-flex align-items-center">
                                 <RadzenCheckBox @bind-Value="@row.IsActive" Change="@((val) => OnActiveChange(row))" TValue="bool" />
-                                <span @onclick="@(async () => { row.IsActive = !row.IsActive; await OnActiveChange(row); })" style="cursor:pointer" class="ml-2 ms-2">Active</span>
-                                @if (!edit.IsTrue(row.Id))
-                                {
-                                    <RadzenButton Text="Edit" Icon="edit" class="ml-2 ms-2" Click="@(() => edit[row.Id] = true)" />
-                                }
-                                else
-                                {
-                                    <div class="d-flex align-items-center">
-                                        <RadzenButton Text="Cancel" Icon="cancel" class="ml-2 ms-2" ButtonStyle="ButtonStyle.Light" Click="@(() => edit[row.Id] = false)" />
-                                    </div>
-                                }
+                                <span @onclick="@(async () => { row.IsActive = !row.IsActive; await OnActiveChange(row); })" style="cursor:pointer" class="ml-2 ms-2">Active</span>                                
+                                <EditToggle ToggleDictionary="edit" RowId="@row.Id" OnToggled="OnToggled"/>
                             </div>
 
                             @if (row.Type == ItemType.TestCase)
@@ -273,5 +264,10 @@
         await Data.AcceptanceRequests.SaveAsync(request);
     }
 
-    async Task OnActiveChange(ListItemsResult row) => await Data.Items.SaveAsync(row);    
+    async Task OnActiveChange(ListItemsResult row) => await Data.Items.SaveAsync(row);
+
+    async Task OnToggled()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
 }

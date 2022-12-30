@@ -1,0 +1,23 @@
+﻿<div class="d-flex align-items-center">
+@if (!ToggleDictionary.IsTrue(RowId))
+{
+    <RadzenButton Text="Edit" Icon="edit" class="ml-2 ms-2" Click="@(async () => { ToggleDictionary[RowId] = true; await OnToggled.InvokeAsync(); })" />
+}
+else
+{
+    <div class="d-flex align-items-center">
+        <RadzenButton Text="Cancel" Icon="cancel" class="ml-2 ms-2" ButtonStyle="ButtonStyle.Light" Click="@(async () => { ToggleDictionary[RowId] = false; await OnToggled.InvokeAsync(); })" />
+    </div>
+}
+</div>
+
+@code {
+    [Parameter]
+    public int RowId { get; set; }
+
+    [Parameter]
+    public Dictionary<int, bool> ToggleDictionary { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnToggled { get; set; }
+}
