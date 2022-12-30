@@ -20,7 +20,7 @@ namespace UserVoice.Service.Repositories
                 await new InsertUnreadComments() 
                 { 
                     CommentId = model.Id,
-                    UserId = Context.User.Id
+                    ExcludeUserId = Context.User.Id
                 }.ExecuteAsync(connection);
 
                 if (model.ItemStatus.HasValue)
