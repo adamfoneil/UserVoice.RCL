@@ -1,6 +1,7 @@
 ﻿using AO.Models.Enums;
 using System.Data;
 using UserVoice.Database;
+using UserVoice.RCL.Service.Queries;
 
 namespace UserVoice.Service.Repositories
 {
@@ -12,13 +13,18 @@ namespace UserVoice.Service.Repositories
 
         protected override async Task AfterSaveAsync(IDbConnection connection, SaveAction action, Comment model, IDbTransaction txn = null)
         {
-            var ctx = (UserVoiceDataContext)Context;
+            var ctx = (UserVoiceDataContext)Context;            
 
-            if (action == SaveAction.Insert && model.ItemStatus.HasValue)
-            {                
-                var item = await ctx.Items.GetAsync(model.ItemId);
-                item.StatusCommentId = model.Id;
-                await ctx.Items.SaveAsync(item);
+            if (action == SaveAction.Insert)
+            {
+                await new InsertUnreadComments() { CommentId = model.Id }.ExecuteAsync(connection);
+
+                if (model.ItemStatus.HasValue)
+                {
+                    var item = await ctx.Items.GetAsync(model.ItemId);
+                    item.StatusCommentId = model.Id;
+                    await ctx.Items.SaveAsync(item);
+                }                
             }
 
             if (model.AcceptanceRequestId.HasValue && model.IsRejected)

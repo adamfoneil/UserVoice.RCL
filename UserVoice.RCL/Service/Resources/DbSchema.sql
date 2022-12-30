@@ -91,6 +91,16 @@ CREATE TABLE [uservoice].[ReleaseNoteMarker] (
 
 GO
 
+CREATE TABLE [uservoice].[UnreadComment] (
+    [Id] int identity(1,1)  NOT NULL,
+    [CommentId] int   NOT NULL,
+    [UserId] int   NOT NULL,
+    CONSTRAINT [PK_uservoiceUnreadComment] PRIMARY KEY ([CommentId] ASC, [UserId] ASC),
+    CONSTRAINT [U_uservoiceUnreadComment_Id] UNIQUE ([Id] ASC)
+)
+
+GO
+
 ALTER TABLE [uservoice].[AcceptanceRequest] ADD CONSTRAINT [FK_uservoiceAcceptanceRequest_ItemId] FOREIGN KEY ([ItemId]) REFERENCES [uservoice].[Item] ([Id])
 
 GO
@@ -104,6 +114,14 @@ ALTER TABLE [uservoice].[Comment] ADD CONSTRAINT [FK_uservoiceComment_ItemId] FO
 GO
 
 ALTER TABLE [uservoice].[Item] ADD CONSTRAINT [FK_uservoiceItem_StatusCommentId] FOREIGN KEY ([StatusCommentId]) REFERENCES [uservoice].[Comment] ([Id])
+
+GO
+
+ALTER TABLE [uservoice].[UnreadComment] ADD CONSTRAINT [FK_uservoiceUnreadComment_CommentId] FOREIGN KEY ([CommentId]) REFERENCES [uservoice].[Comment] ([Id]) ON DELETE CASCADE
+
+GO
+
+ALTER TABLE [uservoice].[UnreadComment] ADD CONSTRAINT [FK_uservoiceUnreadComment_UserId] FOREIGN KEY ([UserId]) REFERENCES [uservoice].[User] ([Id]) ON DELETE CASCADE
 
 GO
 
