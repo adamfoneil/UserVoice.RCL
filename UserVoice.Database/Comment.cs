@@ -45,5 +45,8 @@ namespace UserVoice.Database
 
         [NotMapped]
         public bool IsRejected { get; set; }
+
+        [NotMapped]
+        public int? UnreadCommentId { get; set; }
     }
 }

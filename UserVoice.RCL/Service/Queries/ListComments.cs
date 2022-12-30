@@ -9,10 +9,12 @@ namespace UserVoice.Service.Queries
     {
         public ListComments() : base(
             @"SELECT 
-                [c].*
+                [c].*,
+                [uc].[Id] AS [UnreadCommentId]
             FROM 
                 [uservoice].[Comment] [c]
                 INNER JOIN @itemIds [i] ON [c].[ItemId]=[i].[Id]
+                LEFT JOIN [uservoice].[UnreadComment] [uc] ON [c].[Id]=[uc].[CommentId] AND [UserId]=@userId
             ORDER BY
                 [c].[DateCreated] ASC")
         {
@@ -20,5 +22,7 @@ namespace UserVoice.Service.Queries
 
         [TableType("uservoice.IdList")]
         public DataTable? ItemIds { get; set; }
+
+        public int UserId { get; set; }
     }
 }

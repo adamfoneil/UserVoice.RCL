@@ -249,6 +249,7 @@
     {
         comments = (await new ListComments()
         {
+            UserId = CurrentUser?.Id ?? Data.User?.Id ?? 0,
             ItemIds = items.Select(row => row.Id).ToDataTable()
         }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
     }

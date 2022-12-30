@@ -12,7 +12,8 @@ namespace UserVoice.Service.Queries
         LatestStatusChange,
         MostVotes,
         MostUpvoted,
-        LatestComment
+        LatestComment,
+        UnreadComments
     }
 
     public class ListItemsResult
@@ -145,6 +146,7 @@ namespace UserVoice.Service.Queries
         [OrderBy(ListItemsSortOptions.MostVotes, "[TotalVotes] DESC")]
         [OrderBy(ListItemsSortOptions.MostUpvoted, "[TotalUpvotes] DESC")]
         [OrderBy(ListItemsSortOptions.LatestComment, "[LatestCommentDate] DESC")]
+        [OrderBy(ListItemsSortOptions.UnreadComments, "[UnreadCommentCount] DESC")]
         public ListItemsSortOptions Sort { get; set; } = ListItemsSortOptions.LatestModifedOrAdded;
     }
 }
