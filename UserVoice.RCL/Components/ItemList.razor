@@ -53,19 +53,19 @@
 
 <RadzenDataList Data="@items">
     <Template Context="row">        
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between">            
             <div class="d-flex align-items-center" style="cursor:pointer" @onclick="@(() => ToggleSection(row.Id))">
-                <div class="text-muted d-flex align-items-center">
+                <div class="text-muted d-flex align-items-center @row.UnreadCssClass">
                     <RadzenIcon Icon="@Data.TypeInfo[row.Type].Icon" class="mr-1 me-2" Style="@Data.TypeInfo[row.Type].Style"/>                    
-                    <span class="text-muted">#@(row.Id)</span>                    
+                    <span class="text-muted">@row.UnreadMarkup($"#{row.Id}")</span>                    
                 </div>
 
-                <div class="ms-2 ml-2">
-                    @row.Title
+                <div class="ms-2 ml-2 @row.UnreadCssClass">
+                    @row.UnreadMarkup(row.Title)
                 </div>
 
-                <div class="ms-2 ml-2 text-muted small" title="@row.DateInfo()">
-                    @row.PostDate.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now)
+                <div class="ms-2 ml-2 text-muted small @row.UnreadCssClass" title="@row.DateInfo()">
+                    @row.UnreadMarkup(row.PostDate.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now))
                 </div>
 
                 <ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" @bind-Value="@expand[row.Id]" class="ml-2 ms-2"/>
@@ -195,6 +195,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        query.UserId = CurrentUser?.Id ?? Data.User?.Id ?? 0;
+
         users = await new ListUsers() { Role = Role.SignOffUser }.ExecuteAsync(Data.GetConnection);
         await Refresh();
     }
@@ -247,6 +249,7 @@
     {
         comments = (await new ListComments()
         {
+            UserId = CurrentUser?.Id ?? Data.User?.Id ?? 0,
             ItemIds = items.Select(row => row.Id).ToDataTable()
         }.ExecuteAsync(Data.GetConnection)).ToLookup(row => row.ItemId);
     }

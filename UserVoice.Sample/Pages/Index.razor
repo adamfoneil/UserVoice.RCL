@@ -15,7 +15,7 @@
     ItemList? list;
 
     protected override void OnInitialized()
-    {
+    {        
         user = new Database.User()
         {
             Name = "adamo",
@@ -24,6 +24,17 @@
             Role = Database.Role.ProductOwner | Database.Role.SignOffUser,
             Id = 2
         };
+        
+        /*
+        user = new Database.User()
+        {
+            Name = "someone",
+            Email = "someone@nowhere.org",
+            TimeZoneId = "Eastern Daylight Time",
+            Role = Database.Role.ProductOwner | Database.Role.SignOffUser,
+            Id = 1002
+        };
+        */
     }
 
     async Task OnItemSaved(Database.Item item)

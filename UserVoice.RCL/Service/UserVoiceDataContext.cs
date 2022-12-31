@@ -34,6 +34,7 @@ namespace UserVoice.Service
         public BaseRepository<Vote> Votes => new BaseRepository<Vote>(this);
         public UserRepository Users => new UserRepository(this);
         public ReleaseNoteMarkerRepository ReleaseNoteMarkers => new ReleaseNoteMarkerRepository(this);
+        public BaseRepository<UnreadComment> UnreadComments => new BaseRepository<UnreadComment>(this);
 
         public async Task CreateSchemaIfNotExistsAsync()
         {

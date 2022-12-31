@@ -7,8 +7,22 @@
     @foreach (var comment in Comments)
     {
         <li class="list-group-item">
-            <strong>@comment.CreatedBy</strong>
-            <span class="text-muted ml-2 ms-2">@comment.DateCreated.ElapsedRelative(DateTime.Now)</span>
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    @if (comment.UnreadCommentId.HasValue)
+                    {
+                        <RadzenIcon Icon="mark_chat_unread" class="mr-2 me-2" Style="color:darkmagenta"/>
+                    }
+                    <strong>@comment.CreatedBy</strong>
+                    <span class="text-muted ml-2 ms-2">@comment.DateCreated.ElapsedRelative(DateTime.Now)</span>
+                </div>
+                <div>
+                    @if (comment.UnreadCommentId.HasValue)
+                    {
+                        <RadzenButton Text="Mark as read" Click="@(async () => await MarkAsRead(comment.UnreadCommentId.Value))"/>
+                    }
+                </div>                
+            </div>            
             <div>
                 @comment.Body.ToMarkup()
             </div>
@@ -103,6 +117,7 @@
     {
         Comments = await new ListComments()
         {
+            UserId = CurrentUser?.Id ?? Data.User?.Id ?? 0,
             ItemIds = new[] { ItemId }.ToDataTable()
         }.ExecuteAsync(Data.GetConnection);
         StateHasChanged();
@@ -127,5 +142,11 @@
         await Refresh();
 
         spinner?.Hide();
+    }
+
+    async Task MarkAsRead(int unreadCommentId)
+    {
+        await Data.UnreadComments.DeleteAsync(new UnreadComment() { Id = unreadCommentId });
+        await CommentSaved.InvokeAsync();
     }
 }

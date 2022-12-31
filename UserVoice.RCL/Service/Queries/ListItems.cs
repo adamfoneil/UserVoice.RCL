@@ -1,6 +1,7 @@
 ﻿using CopyObjectLibrary;
 using Dapper.QX;
 using Dapper.QX.Attributes;
+using Microsoft.AspNetCore.Components;
 using UserVoice.Database;
 
 namespace UserVoice.Service.Queries
@@ -11,7 +12,8 @@ namespace UserVoice.Service.Queries
         LatestStatusChange,
         MostVotes,
         MostUpvoted,
-        LatestComment
+        LatestComment,
+        UnreadComments
     }
 
     public class ListItemsResult
@@ -35,7 +37,8 @@ namespace UserVoice.Service.Queries
         public int AcceptanceRequestCount { get; set; }
         public DateTime? LatestCommentDate { get; set; }
         public string? LatestCommentUser { get; set; }
-
+        public int UnreadCommentCount { get; set; }
+        
         public DateTime PostDate => DateModified ?? DateCreated;
         
         public string DateInfo()
@@ -45,6 +48,8 @@ namespace UserVoice.Service.Queries
             return result;
         }
 
+        public string UnreadCssClass => (UnreadCommentCount > 0) ? "font-weight-bold" : string.Empty;
+        public MarkupString UnreadMarkup(string? input) => (UnreadCommentCount > 0) ? new MarkupString($"<strong>{input}</strong>") : new MarkupString(input);
         public bool NeedsSignOff => Type == ItemType.TestCase && (AcceptanceRequestCount == 0);
 
         public static implicit operator Item(ListItemsResult row) => row.CopyAs<Item>();
@@ -70,7 +75,15 @@ namespace UserVoice.Service.Queries
             WITH [source] AS (
                 SELECT 
                     [i].*, 
-                    [c].[ItemStatus], [c].[Body] AS [StatusBody], COALESCE([c].[DateModified], [c].[DateCreated]) AS [StatusDate]
+                    [c].[ItemStatus], [c].[Body] AS [StatusBody], COALESCE([c].[DateModified], [c].[DateCreated]) AS [StatusDate],
+                    (
+                        SELECT COUNT(1) 
+                        FROM 
+                            [uservoice].[UnreadComment] [uc] 
+                            INNER JOIN [uservoice].[Comment] [c] ON [uc].[CommentId]=[c].[Id] AND [uc].[UserId]=@userId
+                        WHERE 
+                            [c].[ItemId]=[i].[Id]
+                    ) AS [UnreadCommentCount]
                 FROM 
                     [uservoice].[Item] [i]
                     LEFT JOIN [uservoice].[Comment] [c] ON [i].[StatusCommentId]=[c].[Id]
@@ -110,6 +123,8 @@ namespace UserVoice.Service.Queries
         [Offset(30)]
         public int? Page { get; set; } = 0;
 
+        public int UserId { get; set; }
+
         [Where("[i].[IsActive]=@isActive")]
         public bool? IsActive { get; set; } = true;
 
@@ -131,6 +146,7 @@ namespace UserVoice.Service.Queries
         [OrderBy(ListItemsSortOptions.MostVotes, "[TotalVotes] DESC")]
         [OrderBy(ListItemsSortOptions.MostUpvoted, "[TotalUpvotes] DESC")]
         [OrderBy(ListItemsSortOptions.LatestComment, "[LatestCommentDate] DESC")]
+        [OrderBy(ListItemsSortOptions.UnreadComments, "[UnreadCommentCount] DESC")]
         public ListItemsSortOptions Sort { get; set; } = ListItemsSortOptions.LatestModifedOrAdded;
     }
 }

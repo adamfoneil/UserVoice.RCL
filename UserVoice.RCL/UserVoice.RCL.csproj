@@ -11,7 +11,7 @@
     <Copyright>Copyright (c) 2022 Adam O'Neil</Copyright>
     <PackageProjectUrl>https://github.com/adamfoneil/UserVoice.RCL</PackageProjectUrl>
     <Authors>Adam O'Neil</Authors>
-    <Version>1.0.25</Version>
+    <Version>1.0.26</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -27,6 +27,7 @@
     <Compile Include="..\UserVoice.Database\Conventions\BaseEntity.cs" Link="Database\Conventions\BaseEntity.cs" />
     <Compile Include="..\UserVoice.Database\Item.cs" Link="Database\Item.cs" />
     <Compile Include="..\UserVoice.Database\ReleaseNoteMarker.cs" Link="Database\ReleaseNoteMarker.cs" />
+    <Compile Include="..\UserVoice.Database\UnreadComment.cs" Link="Database\UnreadComment.cs" />
     <Compile Include="..\UserVoice.Database\User.cs" Link="Database\User.cs" />
     <Compile Include="..\UserVoice.Database\Vote.cs" Link="Database\Vote.cs" />
   </ItemGroup>
@@ -44,7 +45,7 @@
     <PackageReference Include="AO.CopyObject" Version="1.0.1" />
     <PackageReference Include="AO.Dapper.Repository.SqlServer" Version="1.3.0" />
     <PackageReference Include="AO.Models" Version="1.1.47" />
-    <PackageReference Include="Dapper.QX" Version="1.1.0" />
+    <PackageReference Include="Dapper.QX" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
     <PackageReference Include="Radzen.Blazor" Version="4.4.7" />
   </ItemGroup>
