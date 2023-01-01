@@ -194,9 +194,7 @@
     public RenderFragment? ChildContent { get; set; }
 
     protected override async Task OnInitializedAsync()
-    {
-        query.UserId = CurrentUser?.Id ?? Data.User?.Id ?? 0;
-
+    {        
         users = await new ListUsers() { Role = Role.SignOffUser }.ExecuteAsync(Data.GetConnection);
         await Refresh();
     }
@@ -204,6 +202,7 @@
     protected override void OnParametersSet()
     {
         Data.User = CurrentUser;
+        query.UserId = CurrentUser?.Id ?? Data.User?.Id ?? 0;
     }
 
     public async Task Refresh()
