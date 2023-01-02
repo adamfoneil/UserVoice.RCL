@@ -22,6 +22,12 @@
         </div>
     }
 
+    @if (totalUnreadComments > 0)
+    {
+        var title = $"{totalUnreadComments} unread comments";
+        <RadzenButton Text="@totalUnreadComments.ToString()" Icon="mark_chat_unread" Click="ApplyUnreadCommentSort" title="@title" />
+    }
+
     <div class="mx-3 d-flex align-items-center">
         <div class="mr-2 me-2">Sort By:</div>
         <RadzenDropDown Data="@(Dropdown.FromEnum<ListItemsSortOptions>())" ValueProperty="Key" TextProperty="Value" @bind-Value="@query.Sort" Change="@Refresh"/>
@@ -68,7 +74,7 @@
                     @row.UnreadMarkup(row.PostDate.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now))
                 </div>
 
-                <ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" @bind-Value="@expand[row.Id]" class="ml-2 ms-2"/>
+                <ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" class="ml-2 ms-2" Value="@expand.IsTrue(row.Id)"/>
             </div>
 
             <div>
@@ -176,6 +182,7 @@
     Dictionary<int, bool> edit = new();
     IEnumerable<User> users = Enumerable.Empty<User>();
     IEnumerable<AcceptanceMetricsResult> acceptanceMetrics = Enumerable.Empty<AcceptanceMetricsResult>();
+    int totalUnreadComments = 0;
 
     int? GetAcceptanceRequestId(int itemId)
     {
@@ -209,6 +216,7 @@
     {
         query.Search = SearchText;
         items = await query.ExecuteAsync(Data.GetConnection);
+        totalUnreadComments = items.Sum(row => row.UnreadCommentCount);
 
         acceptanceRequests = (await new ListAcceptanceRequests()
         {
@@ -276,4 +284,10 @@
     }
 
     async Task OnActiveChange(ListItemsResult row) => await Data.Items.SaveAsync(row);    
+
+    async Task ApplyUnreadCommentSort()
+    {
+        query.Sort = ListItemsSortOptions.UnreadComments;
+        await Refresh();
+    }
 }

@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace UserVoice.RCL.Extensions
+﻿namespace UserVoice.RCL.Extensions
 {
     internal static class DictionaryExtensions
     {
