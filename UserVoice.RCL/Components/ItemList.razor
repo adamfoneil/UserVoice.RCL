@@ -1,4 +1,5 @@
 ﻿@using Dapper.QX.Extensions
+@using UserVoice.RCL.Service.Interfaces;
 @inject UserVoiceDataContext Data
 
 <div class="d-flex justify-content-center my-2">
@@ -200,6 +201,9 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    [Parameter]
+    public IIssueImporter? IssueImporter { get; set; }
+
     protected override async Task OnInitializedAsync()
     {        
         users = await new ListUsers() { Role = Role.SignOffUser }.ExecuteAsync(Data.GetConnection);
@@ -214,6 +218,11 @@
 
     public async Task Refresh()
     {
+        if (IssueImporter is not null)
+        {
+            await IssueImporter.MergeItemsAsync();
+        }
+
         query.Search = SearchText;
         items = await query.ExecuteAsync(Data.GetConnection);
         totalUnreadComments = items.Sum(row => row.UnreadCommentCount);
