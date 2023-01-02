@@ -54,7 +54,7 @@ namespace UserVoice.RCL.Service
                 {
                     Type = ItemType.Issue,
                     ExternalId = issue.number,
-                    ExternalUrl = issue.url,
+                    ExternalUrl = issue.html_url,
                     Title = issue.title,
                     Body = Markdown.ToHtml(body)
                 };
