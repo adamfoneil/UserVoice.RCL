@@ -47,6 +47,8 @@ namespace UserVoice.RCL.Service
                 State = IssueState.Open             
             });
 
+            var titlesByNumber = _allIssues.ToDictionary(issue => issue.number, issue => issue.title);
+
             return _allIssues.Where(issue => issue.assignees.Any()).Select(issue =>
             {
                 var body = issue.body + $"\r\n\r\nAssigned to: {string.Join(", ", issue.assignees.Select(u => u.login))}";

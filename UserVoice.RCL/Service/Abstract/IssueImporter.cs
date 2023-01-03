@@ -35,8 +35,9 @@ namespace UserVoice.RCL.Service.Abstract
 
             var openItems = await GetActiveItemsAsync();
 
-            foreach (var item in openItems)
+            foreach (var item in openItems.Where(row => row.ExternalId.HasValue && !string.IsNullOrEmpty(row.ExternalUrl)))
             {
+                if (await _dataContext.ExternalItems.ExistsAsync(item.ExternalId.Value)) continue;
                 await _dataContext.Items.SaveAsync(item);
             }
 

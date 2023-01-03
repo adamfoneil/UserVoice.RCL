@@ -18,7 +18,7 @@ namespace UserVoice.RCL.Service.Repositories
 
             if (model.ExternalId.HasValue && !string.IsNullOrEmpty(model.ExternalUrl))
             {
-                var externalItem = await context.ExternalItems.GetWhereAsync(new { externalId = model.ExternalId.Value });
+                var externalItem = await context.ExternalItems.GetByExternalIdAsync(model.ExternalId.Value);
                 if (externalItem != null) model.Id = externalItem.ItemId;
             }
         }
@@ -38,12 +38,14 @@ namespace UserVoice.RCL.Service.Repositories
 
             if (model.ExternalId.HasValue && !string.IsNullOrEmpty(model.ExternalUrl))
             {
-                await context.ExternalItems.MergeAsync(new ExternalItem()
+                var externalItem = await context.ExternalItems.GetByExternalIdAsync(model.ExternalId.Value) ?? new ExternalItem()
                 {
-                    ItemId = model.Id,
-                    ExternalId = model.ExternalId.Value,
-                    Url = model.ExternalUrl
-                });
+                    ExternalId = model.ExternalId.Value                    
+                };
+
+                externalItem.Url = model.ExternalUrl;
+                externalItem.ItemId = model.Id;                
+                await context.ExternalItems.SaveAsync(externalItem);                                
             }
         }
     }
