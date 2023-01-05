@@ -18,5 +18,16 @@ namespace UserVoice.RCL.Service.Repositories
 
         public async Task<ExternalItem> GetByExternalIdAsync(int externalId) => await GetWhereAsync(new { externalId });
 
+        public async Task LinkExistingAsync(Item item)
+        {
+            if (item.ExternalId.HasValue)
+            {
+                var existing = await GetByExternalIdAsync(item.ExternalId.Value);
+                if (existing is not null && item.Id == 0)
+                {
+                    item.Id = existing.ItemId;
+                }
+            }            
+        }
     }
 }

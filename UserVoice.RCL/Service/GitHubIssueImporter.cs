@@ -3,6 +3,8 @@ using GitHubApiClient.Models.Requests;
 using GitHubApiClient.Models.Responses;
 using Markdig;
 using Microsoft.Extensions.Options;
+using System.Text;
+using System.Text.RegularExpressions;
 using UserVoice.Database;
 using UserVoice.RCL.Service.Abstract;
 using UserVoice.RCL.Service.Models;
@@ -52,6 +54,9 @@ namespace UserVoice.RCL.Service
             return _allIssues.Where(issue => issue.assignees.Any()).Select(issue =>
             {
                 var body = issue.body + $"\r\n\r\nAssigned to: {string.Join(", ", issue.assignees.Select(u => u.login))}";
+
+                ReplaceIssueRefs(ref body, titlesByNumber);
+
                 return new Item()
                 {
                     Type = ItemType.Issue,
@@ -62,5 +67,19 @@ namespace UserVoice.RCL.Service
                 };
             });
         }
+
+        private void ReplaceIssueRefs(ref string body, Dictionary<int, string> titlesByNumber)
+        {
+            var result = Regex.Replace(body, @"\s#(\d*)\s", InsertTitle);
+
+            // todo: titlesByNumber needs to be all issues, not just open ones
+
+            string InsertTitle(Match match) =>
+                (int.TryParse(match.Groups[1].Value, out int issueNum) && titlesByNumber.ContainsKey(issueNum)) ? 
+                    titlesByNumber[issueNum] : 
+                    string.Empty;
+
+            body = result;
+        }        
     }
 }
