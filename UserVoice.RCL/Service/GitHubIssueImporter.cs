@@ -46,12 +46,12 @@ namespace UserVoice.RCL.Service
         {
             _allIssues = await _client.GetAllIssuesAsync(_options.RepositoryName, new IssuesQuery()
             {                
-                State = IssueState.Open             
+                State = IssueState.All
             });
 
             var titlesByNumber = _allIssues.ToDictionary(issue => issue.number, issue => issue.title);
 
-            return _allIssues.Where(issue => issue.assignees.Any()).Select(issue =>
+            return _allIssues.Where(issue => issue.assignees.Any() && issue.state == "open").Select(issue =>
             {
                 var body = issue.body + $"\r\n\r\nAssigned to: {string.Join(", ", issue.assignees.Select(u => u.login))}";
 
@@ -72,11 +72,9 @@ namespace UserVoice.RCL.Service
         {
             var result = Regex.Replace(body, @"\s#(\d*)\s", InsertTitle);
 
-            // todo: titlesByNumber needs to be all issues, not just open ones
-
             string InsertTitle(Match match) =>
                 (int.TryParse(match.Groups[1].Value, out int issueNum) && titlesByNumber.ContainsKey(issueNum)) ? 
-                    titlesByNumber[issueNum] : 
+                    $" {titlesByNumber[issueNum]} [# {issueNum}] " : 
                     string.Empty;
 
             body = result;
