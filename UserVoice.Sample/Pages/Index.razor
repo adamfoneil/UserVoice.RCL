@@ -1,13 +1,13 @@
 ﻿@page "/"
 @using UserVoice.RCL.Service.Interfaces;
-@inject IIssueImporter IssueImporter
+
 
 <PageTitle>Index</PageTitle>
 
 <div class="container">    
     <ReleaseNotesCompactList CurrentUser="@user" ItemLinkTemplate="ItemLink" ViewAllLink="/Changelog"/>
 
-    <ItemList @ref="list" CurrentUser="@user" IssueImporter="@IssueImporter">
+    <ItemList @ref="list" CurrentUser="@user">
         <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" ShowCurrentUser="true" />
     </ItemList>
 </div>
