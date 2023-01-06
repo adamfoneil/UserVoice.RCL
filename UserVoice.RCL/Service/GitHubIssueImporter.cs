@@ -3,7 +3,6 @@ using GitHubApiClient.Models.Requests;
 using GitHubApiClient.Models.Responses;
 using Markdig;
 using Microsoft.Extensions.Options;
-using System.Text;
 using System.Text.RegularExpressions;
 using UserVoice.Database;
 using UserVoice.RCL.Service.Abstract;
@@ -51,7 +50,7 @@ namespace UserVoice.RCL.Service
 
             var titlesByNumber = _allIssues.ToDictionary(issue => issue.number, issue => issue.title);
 
-            return _allIssues.Where(issue => issue.assignees.Any() && issue.state == "open").Select(issue =>
+            return _allIssues.Where(issue => issue.assignees.Any() && issue.state.Equals("open")).Select(issue =>
             {
                 var body = issue.body + $"\r\n\r\nAssigned to: {string.Join(", ", issue.assignees.Select(u => u.login))}";
 
