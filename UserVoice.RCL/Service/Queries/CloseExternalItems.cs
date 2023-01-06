@@ -4,14 +4,15 @@ using System.Data;
 
 namespace UserVoice.RCL.Service.Queries
 {
-    public class CloseItems : Query<int>
+    public class CloseExternalItems : Query<int>
     {
-        public CloseItems() : base(
+        public CloseExternalItems() : base(
             @"UPDATE [i] SET
                 [IsActive]=0
             FROM
                 [uservoice].[Item] [i]
                 INNER JOIN @itemIds [ids] ON [i].[Id]=[ids].[Id]
+                INNER JOIN [uservoice].[ExternalItem] [ei] ON [i].[Id]=[ei].[ItemId]
             WHERE
                 [i].[IsActive]=1")
         {

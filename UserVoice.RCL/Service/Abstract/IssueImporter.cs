@@ -45,7 +45,7 @@ namespace UserVoice.RCL.Service.Abstract
 
             foreach (var itemIdChunk in closedItems.Chunk(50))
             {
-                await new CloseItems()
+                await new CloseExternalItems()
                 {
                     ItemIds = itemIdChunk.ToDataTable()
                 }.ExecuteAsync(_dataContext.GetConnection);
