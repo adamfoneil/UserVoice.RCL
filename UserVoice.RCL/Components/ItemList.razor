@@ -1,4 +1,5 @@
 ﻿@using Dapper.QX.Extensions
+@using UserVoice.RCL.Service.Interfaces;
 @inject UserVoiceDataContext Data
 
 <div class="d-flex justify-content-center my-2">
@@ -63,7 +64,7 @@
             <div class="d-flex align-items-center" style="cursor:pointer" @onclick="@(() => ToggleSection(row.Id))">
                 <div class="text-muted d-flex align-items-center @row.UnreadCssClass">
                     <RadzenIcon Icon="@Data.TypeInfo[row.Type].Icon" class="mr-1 me-2" Style="@Data.TypeInfo[row.Type].Style"/>                    
-                    <span class="text-muted">@row.UnreadMarkup($"#{row.Id}")</span>                    
+                    <span class="text-muted">@row.UnreadMarkup($"#{row.DisplayId}")</span>                    
                 </div>
 
                 <div class="ms-2 ml-2 @row.UnreadCssClass">

@@ -53,6 +53,12 @@ namespace UserVoice.Database
         [NotMapped]
         public int? AssignToUserId { get; set; }
 
+        [NotMapped]
+        public int? ExternalId { get; set; }
+
+        [NotMapped]
+        public string ExternalUrl { get; set; }
+
         public static Dictionary<Role, IEnumerable<ItemType>> AllowedTypes => new Dictionary<Role, IEnumerable<ItemType>>()
         {
             [Role.ProductOwner] = new[] { ItemType.FeatureIdea, ItemType.TestCase, ItemType.Issue, ItemType.ReleaseNote },

@@ -1,13 +1,17 @@
 ﻿@page "/"
+@using UserVoice.RCL.Service.Interfaces;
+@inject IIssueImporter IssueImporter
 
 <PageTitle>Index</PageTitle>
 
 <div class="container">    
     <ReleaseNotesCompactList CurrentUser="@user" ItemLinkTemplate="ItemLink" ViewAllLink="/Changelog"/>
 
+    <RadzenButton Text="Import Issues" Icon="sync" Click="ImportIssues" />
+
     <ItemList @ref="list" CurrentUser="@user">
         <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" ShowCurrentUser="true" />
-    </ItemList>
+    </ItemList>    
 </div>
 
 @code {
@@ -16,7 +20,7 @@
 
     protected override void OnInitialized()
     {     
-        
+
         user = new Database.User()
         {
             Name = "adamo",
@@ -25,17 +29,17 @@
             Role = Database.Role.ProductOwner | Database.Role.SignOffUser,
             Id = 2
         };
-        
+
         /*
         user = new Database.User()
         {
-            Name = "someone",
-            Email = "someone@nowhere.org",
-            TimeZoneId = "Eastern Daylight Time",
-            Role = Database.Role.ProductOwner | Database.Role.SignOffUser,
-            Id = 1002
-        };
-        */
+        Name = "someone",
+        Email = "someone@nowhere.org",
+        TimeZoneId = "Eastern Daylight Time",
+        Role = Database.Role.ProductOwner | Database.Role.SignOffUser,
+    Id = 1002
+    };
+    */
     }
 
     async Task OnItemSaved(Database.Item item)
@@ -44,4 +48,11 @@
     }
 
     string ItemLink(Database.Item item) => $"/Changelog/{item.Id}";
+
+    async Task ImportIssues()
+    {
+        await IssueImporter.MergeItemsAsync();
+        await list.Refresh();
+        StateHasChanged();
+    }
 }

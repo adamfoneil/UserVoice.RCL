@@ -101,6 +101,28 @@ CREATE TABLE [uservoice].[UnreadComment] (
 
 GO
 
+CREATE TABLE [uservoice].[ExternalItem] (
+    [Id] int identity(1,1)  NOT NULL,
+    [ItemId] int   NOT NULL,
+    [Url] nvarchar(255)   NOT NULL,
+    [ExternalId] int   NOT NULL,
+    CONSTRAINT [PK_uservoiceExternalItem] PRIMARY KEY ([ItemId] ASC),
+    CONSTRAINT [U_uservoiceExternalItem_ExternalId] UNIQUE ([ExternalId] ASC),
+    CONSTRAINT [U_uservoiceExternalItem_Id] UNIQUE ([Id] ASC)
+)
+
+GO
+
+CREATE TABLE [uservoice].[ExternalItemSource] (
+    [Id] int identity(1,1)  NOT NULL,
+    [Name] nvarchar(50)   NOT NULL,
+    [LastMerge] datetime   NOT NULL,
+    CONSTRAINT [PK_uservoiceExternalItemSource] PRIMARY KEY ([Name] ASC),
+    CONSTRAINT [U_uservoiceExternalItemSource_Id] UNIQUE ([Id] ASC)
+)
+
+GO
+
 ALTER TABLE [uservoice].[AcceptanceRequest] ADD CONSTRAINT [FK_uservoiceAcceptanceRequest_ItemId] FOREIGN KEY ([ItemId]) REFERENCES [uservoice].[Item] ([Id])
 
 GO
@@ -122,6 +144,10 @@ ALTER TABLE [uservoice].[UnreadComment] ADD CONSTRAINT [FK_uservoiceUnreadCommen
 GO
 
 ALTER TABLE [uservoice].[UnreadComment] ADD CONSTRAINT [FK_uservoiceUnreadComment_UserId] FOREIGN KEY ([UserId]) REFERENCES [uservoice].[User] ([Id]) ON DELETE CASCADE
+
+GO
+
+ALTER TABLE [uservoice].[ExternalItem] ADD CONSTRAINT [FK_ExternalItem_ItemId] FOREIGN KEY ([ItemId]) REFERENCES [uservoice].[Item] ([Id]) ON DELETE CASCADE
 
 GO
 

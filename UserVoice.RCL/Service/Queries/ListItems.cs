@@ -38,8 +38,11 @@ namespace UserVoice.Service.Queries
         public DateTime? LatestCommentDate { get; set; }
         public string? LatestCommentUser { get; set; }
         public int UnreadCommentCount { get; set; }
+        public int? ExternalId { get; set; }
+        public string? ExternalUrl { get; set; }
         
         public DateTime PostDate => DateModified ?? DateCreated;
+        public int DisplayId => ExternalId.HasValue ? ExternalId.Value : Id;
         
         public string DateInfo()
         {
@@ -75,6 +78,7 @@ namespace UserVoice.Service.Queries
             WITH [source] AS (
                 SELECT 
                     [i].*, 
+                    [ei].[ExternalId], [ei].[Url] AS [ExternalUrl],
                     [c].[ItemStatus], [c].[Body] AS [StatusBody], COALESCE([c].[DateModified], [c].[DateCreated]) AS [StatusDate],
                     (
                         SELECT COUNT(1) 
@@ -87,6 +91,7 @@ namespace UserVoice.Service.Queries
                 FROM 
                     [uservoice].[Item] [i]
                     LEFT JOIN [uservoice].[Comment] [c] ON [i].[StatusCommentId]=[c].[Id]
+                    LEFT JOIN [uservoice].[ExternalItem] [ei] ON [i].[Id]=[ei].[ItemId]
                 {where}
             ), [votes] AS (
                 SELECT 
