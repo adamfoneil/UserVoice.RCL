@@ -11,8 +11,8 @@ namespace UserVoice.RCL.Service.Queries
                 [IsActive]=0
             FROM
                 [uservoice].[Item] [i]
-                INNER JOIN @itemIds [ids] ON [i].[Id]=[ids].[Id]
-                INNER JOIN [uservoice].[ExternalItem] [ei] ON [i].[Id]=[ei].[ItemId]
+                INNER JOIN [uservoice].[ExternalItem] [ei] ON [i].[Id]=[ei].[ItemId]                
+                INNER JOIN @itemIds [ids] ON [ei].[ExternalId]=[ids].[Id]                
             WHERE
                 [i].[IsActive]=1")
         {
