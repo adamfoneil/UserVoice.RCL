@@ -7,7 +7,7 @@ using UserVoice.Database.Conventions;
 
 namespace UserVoice.Service.Repositories
 {
-    public class BaseRepository<TModel> : Repository<User, TModel, int> where TModel : IModel<int>
+    public class BaseRepository<TModel> : Repository<UserVoiceDataContext, User, TModel, int> where TModel : IModel<int>
     {
         public BaseRepository(UserVoiceDataContext context) : base(context)
         {
