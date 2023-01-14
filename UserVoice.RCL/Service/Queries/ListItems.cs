@@ -146,6 +146,9 @@ namespace UserVoice.Service.Queries
         [Where("[i].[Title] LIKE CONCAT('%', @search, '%')")]
         public string? Search { get; set; }
 
+        [Where("([i].[Id]=@itemId OR [ei].[ExternalId]=@itemId)")]
+        public int? ItemId { get; set; }
+
         [OrderBy(ListItemsSortOptions.LatestModifedOrAdded, "COALESCE([i].[DateModified], [i].[DateCreated]) DESC")]
         [OrderBy(ListItemsSortOptions.LatestStatusChange, "[StatusDate] DESC")]
         [OrderBy(ListItemsSortOptions.MostVotes, "[TotalVotes] DESC")]

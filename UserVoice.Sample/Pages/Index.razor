@@ -1,4 +1,5 @@
 ﻿@page "/"
+@page "/{ItemId:int}"
 @using UserVoice.RCL.Service.Interfaces;
 @inject IIssueImporter IssueImporter
 
@@ -9,7 +10,7 @@
 
     <RadzenButton Text="Import Issues" Icon="sync" Click="ImportIssues" />
 
-    <ItemList @ref="list" CurrentUser="@user">
+    <ItemList @ref="list" CurrentUser="@user" ItemId="@ItemId">
         <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" ShowCurrentUser="true" />
     </ItemList>    
 </div>
@@ -17,6 +18,9 @@
 @code {
     Database.User user = new();
     ItemList? list;
+
+    [Parameter]
+    public int? ItemId { get; set; }
 
     protected override void OnInitialized()
     {     

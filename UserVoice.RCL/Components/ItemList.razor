@@ -193,13 +193,16 @@
     }
 
     [Parameter]
+    public int? ItemId { get; set; }
+
+    [Parameter]
     public User? CurrentUser { get; set; }
 
     [Parameter]
     public string? SearchText { get; set; }    
 
     [Parameter]
-    public RenderFragment? ChildContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }    
 
     protected override async Task OnInitializedAsync()
     {        
@@ -215,8 +218,12 @@
 
     public async Task Refresh()
     {
+        query.ItemId = ItemId;
+        if (query.ItemId.HasValue) query.Page = 0;
         query.Search = SearchText;
+        
         items = await query.ExecuteAsync(Data.GetConnection);
+
         totalUnreadComments = items.Sum(row => row.UnreadCommentCount);
 
         acceptanceRequests = (await new ListAcceptanceRequests()
