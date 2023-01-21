@@ -1,4 +1,5 @@
-﻿using UserVoice.RCL.Service.Queries;
+﻿using UserVoice.Database;
+using UserVoice.RCL.Service.Queries;
 
 namespace UserVoice.Service
 {
@@ -12,6 +13,12 @@ namespace UserVoice.Service
         {
             var items = await new MyReleaseNotes() { UserName = userName }.ExecuteAsync(GetConnection);
             return items.Any();
+        }
+
+        public async Task UpdateUserAsync(Action<User> action)
+        {            
+            action.Invoke(User);
+            await Users.SaveAsync(User);
         }
     }
 }

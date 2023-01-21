@@ -26,7 +26,9 @@
     <Compile Include="..\UserVoice.Database\Comment.cs" Link="Database\Comment.cs" />
     <Compile Include="..\UserVoice.Database\Conventions\BaseEntity.cs" Link="Database\Conventions\BaseEntity.cs" />
     <Compile Include="..\UserVoice.Database\ExternalItem.cs" Link="Database\ExternalItem.cs" />
+    <Compile Include="..\UserVoice.Database\ExternalItemSource.cs" Link="Database\ExternalItemSource.cs" />
     <Compile Include="..\UserVoice.Database\Item.cs" Link="Database\Item.cs" />
+    <Compile Include="..\UserVoice.Database\ReleaseNoteEmail.cs" Link="Database\ReleaseNoteEmail.cs" />
     <Compile Include="..\UserVoice.Database\ReleaseNoteMarker.cs" Link="Database\ReleaseNoteMarker.cs" />
     <Compile Include="..\UserVoice.Database\UnreadComment.cs" Link="Database\UnreadComment.cs" />
     <Compile Include="..\UserVoice.Database\User.cs" Link="Database\User.cs" />

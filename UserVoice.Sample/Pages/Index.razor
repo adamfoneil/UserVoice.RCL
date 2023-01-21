@@ -24,12 +24,12 @@
 
     protected override void OnInitialized()
     {     
-
         user = new Database.User()
         {
             Name = "adamo",
             Email = "adamosoftware@gmail.com",
-            TimeZoneId = "Eastern Daylight Time",
+            TimeZoneId = "Eastern Daylight Time",            
+            SendReleaseNotes = true,
             Role = Database.Role.ProductOwner | Database.Role.SignOffUser,
             Id = 2
         };
@@ -37,13 +37,13 @@
         /*
         user = new Database.User()
         {
-        Name = "someone",
-        Email = "someone@nowhere.org",
-        TimeZoneId = "Eastern Daylight Time",
-        Role = Database.Role.ProductOwner | Database.Role.SignOffUser,
-    Id = 1002
-    };
-    */
+            Name = "someone",
+            Email = "someone@nowhere.org",
+            TimeZoneId = "Eastern Daylight Time",
+            Role = Database.Role.ProductOwner | Database.Role.SignOffUser,
+        Id = 1002
+        };
+        */
     }
 
     async Task OnItemSaved(Database.Item item)

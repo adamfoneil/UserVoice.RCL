@@ -41,7 +41,15 @@
             <a href="@ViewAllLink">View Changelog</a>
         </div>        
     }
-    
+        
+    @if (Data.User is not null)
+    {
+        <div class="d-flex align-items-center">
+            <RadzenCheckBox TValue="bool" Value="@Data.User.SendReleaseNotes" Change="@(async (val) => await Data.UpdateUserAsync(u => u.SendReleaseNotes = val))" Name="chkSendReleaseNotes" />
+            <RadzenLabel Text="Send Me Release Notes" class="ml-2 ms-2" Component="chkSendReleaseNotes" />
+        </div>
+    }    
+
     @if (items.Any())
     {
         <RadzenButton Text="Dismiss" Click="DismissItems" />
@@ -67,6 +75,14 @@
     public EventCallback OnDismissed { get; set; }
 
     protected override async Task OnInitializedAsync() => await Refresh();
+
+    protected override void OnParametersSet()
+    {
+        if (CurrentUser is not null)
+        {
+            Data.User = CurrentUser;
+        }        
+    }
 
     async Task Refresh()
     {
