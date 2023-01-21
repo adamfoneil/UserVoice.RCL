@@ -42,6 +42,8 @@ namespace UserVoice.Database
         [MaxLength(50)]
         public string TimeZoneId { get; set; }
 
+        public bool SendReleaseNotes { get; set; }
+
         public bool IsActive { get; set; } = true;
 
         public DateTime LocalTime => Timestamp.Local(TimeZoneId);
