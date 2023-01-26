@@ -59,7 +59,7 @@ namespace UserVoice.Database
             return false;
         }
 
-        public override int GetHashCode() => Email?.ToLower().GetHashCode() ?? 0;        
+        public override int GetHashCode() => Email?.ToLower().GetHashCode() ?? 0;
 #endif
     }
 }

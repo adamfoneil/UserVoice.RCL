@@ -12,7 +12,7 @@ using UserVoice.Service;
 namespace UserVoice.RCL.Service
 {
     public class GitHubIssueImporter : IssueImporter
-    {        
+    {
         private readonly GitHubClient _client;
         private readonly GitHubIssueImportOptions _options;
 
@@ -44,7 +44,7 @@ namespace UserVoice.RCL.Service
         protected override async Task<IEnumerable<Item>> GetActiveItemsAsync()
         {
             _allIssues = await _client.GetAllIssuesAsync(_options.RepositoryName, new IssuesQuery()
-            {                
+            {
                 State = IssueState.All
             });
 
@@ -72,11 +72,11 @@ namespace UserVoice.RCL.Service
             var result = Regex.Replace(body, @"\s#(\d*)\s", InsertTitle);
 
             string InsertTitle(Match match) =>
-                (int.TryParse(match.Groups[1].Value, out int issueNum) && titlesByNumber.ContainsKey(issueNum)) ? 
-                    $" {titlesByNumber[issueNum]} [# {issueNum}] " : 
+                (int.TryParse(match.Groups[1].Value, out int issueNum) && titlesByNumber.ContainsKey(issueNum)) ?
+                    $" {titlesByNumber[issueNum]} [# {issueNum}] " :
                     string.Empty;
 
             body = result;
-        }        
+        }
     }
 }

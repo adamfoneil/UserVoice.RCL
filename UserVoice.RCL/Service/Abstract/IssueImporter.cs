@@ -37,7 +37,7 @@ namespace UserVoice.RCL.Service.Abstract
 
             foreach (var item in openItems.Where(row => row.ExternalId.HasValue && !string.IsNullOrEmpty(row.ExternalUrl)))
             {
-                await _dataContext.ExternalItems.LinkExistingAsync(item);                
+                await _dataContext.ExternalItems.LinkExistingAsync(item);
                 await _dataContext.Items.SaveAsync(item);
             }
 

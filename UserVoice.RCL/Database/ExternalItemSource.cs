@@ -1,6 +1,5 @@
 ﻿using AO.Models;
 using AO.Models.Interfaces;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserVoice.Database
@@ -14,6 +13,6 @@ namespace UserVoice.Database
         [MaxLength(50)]
         public string Name { get; set; }
 
-        public DateTime LastMerge { get; set; } 
+        public DateTime LastMerge { get; set; }
     }
 }

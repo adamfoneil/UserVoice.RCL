@@ -40,10 +40,10 @@ namespace UserVoice.Service.Queries
         public int UnreadCommentCount { get; set; }
         public int? ExternalId { get; set; }
         public string? ExternalUrl { get; set; }
-        
+
         public DateTime PostDate => DateModified ?? DateCreated;
         public int DisplayId => ExternalId.HasValue ? ExternalId.Value : Id;
-        
+
         public string DateInfo()
         {
             var result = $"Created {DateCreated:ddd M/d/yy h:mm t}";

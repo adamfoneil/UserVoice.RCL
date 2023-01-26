@@ -30,7 +30,7 @@ namespace UserVoice.Service.Repositories
                         break;
                 }
             }
-            
+
 
             await base.BeforeSaveAsync(connection, action, model, txn);
         }

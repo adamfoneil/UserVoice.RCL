@@ -14,6 +14,6 @@ namespace UserVoice.Database
         [MaxLength(50)]
         public string Name { get; set; }
 
-        public DateTime LastMerge { get; set; } 
+        public DateTime LastMerge { get; set; }
     }
 }
