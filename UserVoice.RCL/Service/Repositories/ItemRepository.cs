@@ -14,6 +14,8 @@ namespace UserVoice.RCL.Service.Repositories
 
         protected override async Task BeforeSaveAsync(IDbConnection connection, SaveAction action, Item model, IDbTransaction txn = null)
         {
+            await base.BeforeSaveAsync(connection, action, model, txn);
+
             var context = Context;
 
             if (model.ExternalId.HasValue && !string.IsNullOrEmpty(model.ExternalUrl))
