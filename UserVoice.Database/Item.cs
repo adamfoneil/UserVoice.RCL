@@ -33,7 +33,7 @@ namespace UserVoice.Database
         public ItemType Type { get; set; }
 
         [Required]
-        [MaxLength(255)]        
+        [MaxLength(255)]
         public string Title { get; set; }
 
         [Required]
@@ -66,7 +66,7 @@ namespace UserVoice.Database
             [Role.SignOffUser] = new[] { ItemType.FeatureIdea, ItemType.Issue, ItemType.TestCase }
         };
 
-        public static IEnumerable<ItemType> GetAllowedTypes(Role roleFlags) => 
+        public static IEnumerable<ItemType> GetAllowedTypes(Role roleFlags) =>
             AllowedTypes
                 .SelectMany(kp => kp.Value, (kp, type) => new { Role = kp.Key, Type = type })
                 .Where(item => roleFlags.HasFlag(item.Role))

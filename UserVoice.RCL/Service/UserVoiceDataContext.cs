@@ -86,7 +86,7 @@ namespace UserVoice.Service
             [ItemStatus.Done] = new("check_circle", "color:darkgreen", "Done"),
             [ItemStatus.Planned] = new("pending", "color:lightblue", "Will Do"),
             [ItemStatus.NotPlanned] = new("do_not_disturb", "color:gray", "Not Planned"),
-            [ItemStatus.NeedsInfo] = new("help", "color:#C97CFF", "Has Questions")            
+            [ItemStatus.NeedsInfo] = new("help", "color:#C97CFF", "Has Questions")
         };
 
         public struct ItemStatusInfo

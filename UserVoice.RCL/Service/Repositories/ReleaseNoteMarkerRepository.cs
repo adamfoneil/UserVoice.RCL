@@ -10,7 +10,7 @@ namespace UserVoice.RCL.Service.Repositories
         {
         }
 
-        public async Task MarkNowAsync(User user) => await ((UserVoiceDataContext)Context).ReleaseNoteMarkers.MergeAsync(new ReleaseNoteMarker()
+        public async Task MarkNowAsync(User user) => await Context.ReleaseNoteMarkers.MergeAsync(new ReleaseNoteMarker()
         {
             UserName = user.Name,
             VisibleAfter = user.LocalTime

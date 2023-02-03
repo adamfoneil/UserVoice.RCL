@@ -27,7 +27,7 @@ namespace UserVoice.RCL.Service.Repositories
                 {
                     item.Id = existing.ItemId;
                 }
-            }            
+            }
         }
     }
 }

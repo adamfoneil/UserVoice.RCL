@@ -1,6 +1,5 @@
 ﻿using AO.Models;
 using AO.Models.Interfaces;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserVoice.Database

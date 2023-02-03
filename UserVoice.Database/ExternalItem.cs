@@ -15,7 +15,7 @@ namespace UserVoice.Database
         public int ItemId { get; set; }
 
         [Required]
-        [MaxLength(255)]        
+        [MaxLength(255)]
         public string Url { get; set; }
 
         public int ExternalId { get; set; }

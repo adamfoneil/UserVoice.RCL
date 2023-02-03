@@ -14,7 +14,9 @@ namespace UserVoice.RCL.Service.Repositories
 
         protected override async Task BeforeSaveAsync(IDbConnection connection, SaveAction action, Item model, IDbTransaction txn = null)
         {
-            var context = (UserVoiceDataContext)Context;
+            await base.BeforeSaveAsync(connection, action, model, txn);
+
+            var context = Context;
 
             if (model.ExternalId.HasValue && !string.IsNullOrEmpty(model.ExternalUrl))
             {
@@ -25,7 +27,7 @@ namespace UserVoice.RCL.Service.Repositories
 
         protected override async Task AfterSaveAsync(IDbConnection connection, SaveAction action, Item model, IDbTransaction txn = null)
         {
-            var context = (UserVoiceDataContext)Context;
+            var context = Context;
 
             if (model.AssignToUserId.HasValue)
             {
@@ -40,12 +42,12 @@ namespace UserVoice.RCL.Service.Repositories
             {
                 var externalItem = await context.ExternalItems.GetByExternalIdAsync(model.ExternalId.Value) ?? new ExternalItem()
                 {
-                    ExternalId = model.ExternalId.Value                    
+                    ExternalId = model.ExternalId.Value
                 };
 
                 externalItem.Url = model.ExternalUrl;
-                externalItem.ItemId = model.Id;                
-                await context.ExternalItems.SaveAsync(externalItem);                                
+                externalItem.ItemId = model.Id;
+                await context.ExternalItems.SaveAsync(externalItem);
             }
         }
     }

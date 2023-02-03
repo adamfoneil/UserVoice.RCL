@@ -19,6 +19,6 @@ namespace UserVoice.RCL.Service.Repositories
         {
             Name = email,
             Email = email
-        };        
+        };
     }
 }
