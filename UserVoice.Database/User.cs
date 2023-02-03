@@ -24,6 +24,13 @@ namespace UserVoice.Database
         SignOffUser = 4
     }
 
+    [Flags]
+    public enum NotifyOptions
+    {
+        Email = 1,
+        Text  = 2
+    }
+
     /// <summary>
     /// users will be imported from the host application and periodically synced
     /// </summary>    
@@ -42,7 +49,10 @@ namespace UserVoice.Database
         [MaxLength(50)]
         public string TimeZoneId { get; set; }
 
-        public bool SendReleaseNotes { get; set; }
+        [MaxLength(20)] public string TimeZone { get; set; }
+        public string PhoneNumber { get; set; }
+
+        public NotifyOptions NotifyOptions { get; set; }
 
         public bool IsActive { get; set; } = true;
 
