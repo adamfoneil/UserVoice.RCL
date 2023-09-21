@@ -11,7 +11,10 @@
     <RadzenButton Text="Import Issues" Icon="sync" Click="ImportIssues" />
 
     <ItemList @ref="list" CurrentUser="@user" ItemId="@ItemId">
-        <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" ShowCurrentUser="true" />
+        <details>
+            <summary>Add New Item</summary>
+            <ItemForm CurrentUser="@user" ItemSaved="OnItemSaved" ShowCurrentUser="true" />
+        </details>        
     </ItemList>    
 </div>
 

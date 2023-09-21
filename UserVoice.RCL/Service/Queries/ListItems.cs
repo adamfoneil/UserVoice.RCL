@@ -13,7 +13,8 @@ namespace UserVoice.Service.Queries
         MostVotes,
         MostUpvoted,
         LatestComment,
-        UnreadComments
+        UnreadComments,
+        Priority
     }
 
     public class ListItemsResult
@@ -40,6 +41,8 @@ namespace UserVoice.Service.Queries
         public int UnreadCommentCount { get; set; }
         public int? ExternalId { get; set; }
         public string? ExternalUrl { get; set; }
+        public int? Priority { get; set; }
+        public bool AllowPriority => Item.AllowPriority(Type);
 
         public DateTime PostDate => DateModified ?? DateCreated;
         public int DisplayId => ExternalId.HasValue ? ExternalId.Value : Id;
@@ -78,6 +81,7 @@ namespace UserVoice.Service.Queries
             WITH [source] AS (
                 SELECT 
                     [i].*, 
+                    [ip].[Order] AS [Priority],
                     [ei].[ExternalId], [ei].[Url] AS [ExternalUrl],
                     [c].[ItemStatus], [c].[Body] AS [StatusBody], COALESCE([c].[DateModified], [c].[DateCreated]) AS [StatusDate],
                     (
@@ -92,6 +96,7 @@ namespace UserVoice.Service.Queries
                     [uservoice].[Item] [i]
                     LEFT JOIN [uservoice].[Comment] [c] ON [i].[StatusCommentId]=[c].[Id]
                     LEFT JOIN [uservoice].[ExternalItem] [ei] ON [i].[Id]=[ei].[ItemId]
+                    LEFT JOIN [uservoice].[ItemPriority] [ip] ON [i].[Id]=[ip].[ItemId]
                 {where}
             ), [votes] AS (
                 SELECT 
@@ -155,6 +160,7 @@ namespace UserVoice.Service.Queries
         [OrderBy(ListItemsSortOptions.MostUpvoted, "[TotalUpvotes] DESC")]
         [OrderBy(ListItemsSortOptions.LatestComment, "[LatestCommentDate] DESC")]
         [OrderBy(ListItemsSortOptions.UnreadComments, "[UnreadCommentCount] DESC")]
+        [OrderBy(ListItemsSortOptions.Priority, "[Priority] ASC")]
         public ListItemsSortOptions Sort { get; set; } = ListItemsSortOptions.LatestModifedOrAdded;
     }
 }

@@ -7,15 +7,11 @@
         <RadzenCheckBox @bind-Value="@query.IsActive" Change="(async () => await Refresh())" TValue="bool?" />
         <span @onclick="@(async () => { query.IsActive = !query.IsActive; await Refresh(); })" style="cursor:pointer" class="ml-2 ms-2">Active Items</span>
     </div>
+       
+    <div class="mx-3 d-flex align-items-center">        
+        <RadzenDropDown @bind-Value="query.Type" Data="Dropdown.FromEnum<ItemType>()" ValueProperty="Key" TextProperty="Value" Change="Refresh" Placeholder="view type" />
+    </div>    
 
-    @foreach (var typeGrp in items.GroupBy(row => row.Type))
-    {
-        <div class="mx-3">
-            <RadzenButton Icon="@Data.TypeInfo[typeGrp.Key].Icon" 
-                Text="@Data.TypeInfo[typeGrp.Key].PluralTextWithCount(typeGrp.Count())" Click="@(() => ApplyFilter(typeGrp.Key))" 
-                ButtonStyle="ButtonStyle.Secondary"/>
-        </div>
-    }
     @if (query.Type.HasValue)
     {
         <div class="mx-3">

@@ -72,5 +72,12 @@ namespace UserVoice.Database
                 .Where(item => roleFlags.HasFlag(item.Role))
                 .Select(item => item.Type)
                 .Distinct();
+
+        public static bool AllowPriority(ItemType itemType)
+        {
+            if (itemType == ItemType.Issue) return true;
+            if (itemType == ItemType.FeatureIdea) return true;
+            return false;
+        }
     }
 }
