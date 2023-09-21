@@ -47,6 +47,7 @@ namespace UserVoice.Database
         public DateTime LocalTime => Timestamp.Local(TimeZoneId);
 
         public bool MayAssignAcceptanceRequests => Role.HasFlag(Role.ProductOwner) || Role.HasFlag(Role.SignOffUser);
+        public bool MaySetPriority => Role.HasFlag(Role.ProductOwner);
 
 #if NET6_0_OR_GREATER
         public override bool Equals(object? obj)

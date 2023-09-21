@@ -141,6 +141,10 @@ namespace UserVoice.Service.Queries
         [Where("[i].[Type]=@type")]
         public ItemType? Type { get; set; }
 
+        [Case(true, "[i].[Type] IN (1, 2)")]
+        [Case(false, "[i].[Type] IN (3, 4)")]
+        public bool? AllowsPriority { get; set; }
+
         [Case(Database.Response.Unassigned, "NOT EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [ItemId]=[i].[Id])")]
         [Where("EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [Response]=@response AND [ItemId]=[i].[Id])")]
         public Response? Response { get; set; }

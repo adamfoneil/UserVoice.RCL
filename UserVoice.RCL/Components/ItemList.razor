@@ -27,7 +27,7 @@
 
     <div class="mx-3 d-flex align-items-center">
         <div class="mr-2 me-2">Sort By:</div>
-        <RadzenDropDown Data="@(Dropdown.FromEnum<ListItemsSortOptions>())" ValueProperty="Key" TextProperty="Value" @bind-Value="@query.Sort" Change="@Refresh"/>
+        <RadzenDropDown Data="@(Dropdown.FromEnum<ListItemsSortOptions>())" ValueProperty="Key" TextProperty="Value" @bind-Value="@query.Sort" Change="SortChange"/>
     </div>
 
     <div class="mx-3">
@@ -114,6 +114,20 @@
                     <FormField Label="Assign To:" LabelColumns="4">
                         <RadzenDropDown Data="users" ValueProperty="Id" TextProperty="Name" TValue="int?" AllowClear="true" Change="@((val) => CreateAcceptanceRequest(val, row.Id))" />
                     </FormField>
+                }                
+
+                @if (row.AllowPriority)
+                {                    
+                    <div>
+                        @if (CurrentUser?.MaySetPriority ?? false)
+                        {
+                            <RadzenNumeric @bind-Value="row.Priority" TValue="int?" Style="width:70px" Change="async (val) => await Data.Priorities.SetAsync(row.Id, val)" />
+                        }
+                        else
+                        {
+                            <span title="priority">@row.Priority</span>
+                        }
+                    </div>
                 }
             </div>            
         </div>
@@ -217,7 +231,7 @@
         query.ItemId = ItemId;
         if (query.ItemId.HasValue) query.Page = 0;
         query.Search = SearchText;
-        
+
         items = await query.ExecuteAsync(Data.GetConnection);
 
         totalUnreadComments = items.Sum(row => row.UnreadCommentCount);
@@ -292,6 +306,12 @@
     async Task ApplyUnreadCommentSort()
     {
         query.Sort = ListItemsSortOptions.UnreadComments;
+        await Refresh();
+    }
+
+    async Task SortChange()
+    {
+        query.AllowsPriority = (query.Sort == ListItemsSortOptions.Priority) ? true : null;        
         await Refresh();
     }
 }

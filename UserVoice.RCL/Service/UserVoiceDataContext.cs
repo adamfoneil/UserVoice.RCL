@@ -37,6 +37,7 @@ namespace UserVoice.Service
         public BaseRepository<UnreadComment> UnreadComments => new BaseRepository<UnreadComment>(this);
         public ExternalItemRepository ExternalItems => new ExternalItemRepository(this);
         public BaseRepository<ExternalItemSource> ExternalItemSources => new BaseRepository<ExternalItemSource>(this);
+        public PriorityRepository Priorities => new PriorityRepository(this);
 
         public async Task CreateSchemaIfNotExistsAsync()
         {

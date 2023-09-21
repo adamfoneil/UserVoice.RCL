@@ -49,6 +49,6 @@ namespace UserVoice.RCL.Service.Repositories
                 externalItem.ItemId = model.Id;
                 await context.ExternalItems.SaveAsync(externalItem);
             }
-        }
+        }        
     }
 }
