@@ -1,4 +1,5 @@
-﻿using UserVoice.Database;
+﻿using Dapper;
+using UserVoice.Database;
 using UserVoice.Service;
 using UserVoice.Service.Repositories;
 
@@ -12,14 +13,13 @@ public class PriorityRepository : BaseRepository<ItemPriority>
 
     public async Task SetAsync(int itemId, int? value)
     {
-        ItemPriority row = new() { ItemId = itemId, Order = value };
-
-        if (value == 0)
+        if (!value.HasValue)
         {
-            await DeleteAsync(row);
+            using var cn = Context.GetConnection();
+            await cn.ExecuteAsync("DELETE [uservoice].[ItemPriority] WHERE [ItemId]=@itemId", new { itemId });
             return;
         }
 
-        await MergeAsync(row);
+        await MergeAsync(new() { ItemId = itemId, Order = value.Value });
     }
 }

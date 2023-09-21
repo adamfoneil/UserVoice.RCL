@@ -10,9 +10,6 @@ namespace UserVoice.Database
         [References(typeof(Item))]
         public int ItemId { get; set; }
 
-        /// <summary>
-        /// if null, then it's considered "backlog"
-        /// </summary>
-        public int? Order { get; set; }
+        public int Order { get; set; }
     }
 }
