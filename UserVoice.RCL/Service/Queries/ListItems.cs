@@ -164,7 +164,7 @@ namespace UserVoice.Service.Queries
         [OrderBy(ListItemsSortOptions.MostUpvoted, "[TotalUpvotes] DESC")]
         [OrderBy(ListItemsSortOptions.LatestComment, "[LatestCommentDate] DESC")]
         [OrderBy(ListItemsSortOptions.UnreadComments, "[UnreadCommentCount] DESC")]
-        [OrderBy(ListItemsSortOptions.Priority, "[Priority] ASC")]
+        [OrderBy(ListItemsSortOptions.Priority, "COALESCE([Priority], 1000) ASC")]
         public ListItemsSortOptions Sort { get; set; } = ListItemsSortOptions.LatestModifedOrAdded;
     }
 }

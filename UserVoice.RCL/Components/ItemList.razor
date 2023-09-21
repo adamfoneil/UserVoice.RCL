@@ -33,6 +33,10 @@
     <div class="mx-3">
         <Pager @bind-Value="@query.Page" Change="Refresh"/>
     </div>
+
+    <div class="mx-3">
+        <RadzenButton Click="Refresh" Icon="refresh"/>
+    </div>
 </div>
 
 @if (query.Type == ItemType.TestCase)
