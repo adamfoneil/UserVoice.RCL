@@ -60,7 +60,7 @@ namespace UserVoice.Service
         public Dictionary<ItemType, ItemTypeInfo> TypeInfo = new()
         {
             [ItemType.Issue] = new("feedback", "color:maroon", "Issue", "Issues"),
-            [ItemType.FeatureIdea] = new("lightbulb", "color:darkgreen", "Feature/Idea", "Features/Ideas"),
+            [ItemType.FeatureIdea] = new("lightbulb", "color:#58CAD8", "Feature/Idea", "Features/Ideas"),
             [ItemType.TestCase] = new("science", "color:#cc33ff", "Test Case", "Test Cases"),
             [ItemType.ReleaseNote] = new("campaign", "color:#FF9025", "Release Note", "Release Notes")
         };
