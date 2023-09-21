@@ -145,6 +145,10 @@ namespace UserVoice.Service.Queries
         [Case(false, "[i].[Type] IN (3, 4)")]
         public bool? AllowsPriority { get; set; }
 
+        [Case(true, "[ip].[Order] IS NOT NULL")]
+		[Case(false, "[ip].[Order] IS NULL")]
+		public bool? HasPriority { get; set; }
+
         [Case(Database.Response.Unassigned, "NOT EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [ItemId]=[i].[Id])")]
         [Where("EXISTS(SELECT 1 FROM [uservoice].[AcceptanceRequest] WHERE [Response]=@response AND [ItemId]=[i].[Id])")]
         public Response? Response { get; set; }

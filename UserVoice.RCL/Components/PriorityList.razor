@@ -1,0 +1,53 @@
+@inject UserVoiceDataContext Data
+
+@foreach (var row in Items.Where(row => row.Priority.HasValue))
+{
+	<div class="d-flex align-items-center">
+		<div><strong>@row.Priority</strong></div>
+
+		<div class="ms-2 ml-2 text-muted d-flex align-items-center @row.UnreadCssClass">
+			<RadzenIcon Icon="@Data.TypeInfo[row.Type].Icon" class="mr-1 me-2" Style="@Data.TypeInfo[row.Type].Style" />
+			<span class="text-muted">@row.UnreadMarkup($"#{row.DisplayId}")</span>
+		</div>
+
+		<div class="ms-2 ml-2 @row.UnreadCssClass">
+			@row.UnreadMarkup(row.Title)
+		</div>
+
+		<div class="ms-2 ml-2 text-muted small @row.UnreadCssClass" title="@row.DateInfo()">
+			@row.UnreadMarkup(row.PostDate.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now))
+		</div>
+
+		<ExpandToggle OnToggled="@((val) => OnSectionToggled(row.Id, val))" class="ml-2 ms-2" Value="@expand.IsTrue(row.Id)" />
+	</div>
+	@if (expand.IsTrue(row.Id))
+	{
+		<div class="ml-5 ms-5 mt-2">
+			@row.Body.ToMarkup()
+		</div>
+	}
+	<hr/>
+}
+
+@code {
+	private IEnumerable<ListItemsResult> Items = Enumerable.Empty<ListItemsResult>();
+	private Dictionary<int, bool> expand = new();
+
+	[Parameter]
+	public User? CurrentUser { get; set; }
+
+	void OnSectionToggled(int rowId, bool expanded)
+	{
+		expand[rowId] = expanded;
+		StateHasChanged();
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		Items = await new ListItems()
+		{
+			Sort = ListItemsSortOptions.Priority,
+			AllowsPriority = true
+		}.ExecuteAsync(Data.GetConnection);
+	}
+}
