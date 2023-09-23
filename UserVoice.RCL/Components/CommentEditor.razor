@@ -54,7 +54,7 @@
             </RadzenHtmlEditor>
             
             <div class="d-flex justify-content-between mt-2">
-                @if (CurrentUser?.Role == Role.ProductOwner && ItemType == ItemType.FeatureIdea)
+                @if ((CurrentUser?.Role.HasFlag(Role.ProductOwner) ?? false) && ItemType == ItemType.FeatureIdea)
                 {
                     <FormField Label="Feature Status:" LabelColumns="4">
                         <RadzenDropDown Data="@(Dropdown.FromEnum<ItemStatus>())" TValue="ItemStatus?" ValueProperty="Key" TextProperty="Value" @bind-Value="@comment.ItemStatus" AllowClear="true">
@@ -83,6 +83,13 @@
                 <div class="d-flex align-items-center">
                     <button type="submit" class="btn btn-secondary">Save</button>
                     <Spinner @ref="spinner" />
+                    @if (CurrentUser?.Role.HasFlag(Role.ProductOwner) ?? false)
+                    {
+                        <label class="ms-2 ml-2">
+                            Release Note
+                            <RadzenCheckBox @bind-Value="comment.IsReleaseNote" />
+                        </label>                        
+                    }
                 </div>
             </div>            
         </EditForm>

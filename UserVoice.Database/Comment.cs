@@ -38,6 +38,11 @@ namespace UserVoice.Database
         [Required]
         public string Body { get; set; }
 
+        /// <summary>
+        /// if true, then this shows on the ReleaseNotesCompactList
+        /// </summary>
+        public bool IsReleaseNote { get; set; }
+
         public static bool AllowStatus(Role role) => role == Role.ProductOwner;
 
         [NotMapped]

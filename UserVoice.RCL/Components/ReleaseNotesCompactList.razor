@@ -2,7 +2,7 @@
 @inject UserVoiceDataContext Data
 
 <ul class="list-group list-group-flush">
-    @foreach (var item in items)
+    @foreach (var item in Items)
     {
         <li class="my-1 list-group-item">
             <div class="d-flex align-items-start">
@@ -32,6 +32,29 @@
             </div>            
         </li>
     }
+
+    @foreach (var comment in Comments)
+    {
+        <li class="my-1 list-group-item">
+            <div class="d-flex align-items-start">
+                <div class="mr-3 me-3 d-flex align-items-center">
+                    <RadzenIcon Icon="@Data.TypeInfo[comment.Type].Icon" Style="@Data.TypeInfo[comment.Type].Style"/>
+                    <span class="text-muted ml-2 ms-2">#@comment.ItemId</span>
+                </div>
+                <div>
+                    <div class="text-muted small">@comment.DateCreated.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now)</div>
+                    <details>
+                        <summary>@comment.Title</summary>
+                        <div class="mt-2">
+                            <strong>@comment.CreatedBy says:</strong> @comment.Body.ToMarkup()
+                            <hr/>
+                            @comment.ItemBody.ToMarkup()
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </li>
+    }
 </ul>
 
 <div class="d-flex justify-content-between align-items-center mt-2">
@@ -42,14 +65,15 @@
         </div>        
     }
     
-    @if (items.Any())
+    @if (Items.Any() || Comments.Any())
     {
         <RadzenButton Text="Dismiss" Click="DismissItems" />
     }
 </div>
 
 @code {
-    IEnumerable<Item> items = Enumerable.Empty<Item>();
+    private IEnumerable<Item> Items = Enumerable.Empty<Item>();
+    private IEnumerable<MyReleaseNoteCommentsResult> Comments = Enumerable.Empty<MyReleaseNoteCommentsResult>();
 
     [Parameter]
     public User? CurrentUser { get; set; }
@@ -70,7 +94,13 @@
 
     async Task Refresh()
     {
-        items = await new MyReleaseNotes()
+        Items = await new MyReleaseNotes()
+        {
+            UserName = CurrentUser?.Name ?? "system",
+            Top = Top
+        }.ExecuteAsync(Data.GetConnection);
+
+        Comments = await new MyReleaseNoteComments()
         {
             UserName = CurrentUser?.Name ?? "system",
             Top = Top
