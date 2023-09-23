@@ -11,7 +11,12 @@ namespace UserVoice.Service
         public async Task<bool> HasReleaseNotesAsync(string userName)
         {
             var items = await new MyReleaseNotes() { UserName = userName }.ExecuteAsync(GetConnection);
-            return items.Any();
+            if (items.Any()) return true;
+            
+            var comments = await new MyReleaseNoteComments() { UserName = userName}.ExecuteAsync(GetConnection);
+            if (comments.Any()) return true;
+
+            return false;
         }
     }
 }
