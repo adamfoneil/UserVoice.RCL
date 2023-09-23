@@ -1,3 +1,7 @@
 ﻿a:link, a:visited {
     color:black;    
 }
+
+img {
+    max-width:100%
+}
