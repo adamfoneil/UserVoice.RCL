@@ -7,7 +7,7 @@
         <li class="my-1 list-group-item">
             <div class="d-flex align-items-start">
                 <div class="mr-3 me-3">
-                    <RadzenIcon Icon="campaign" Style="@Data.TypeInfo[ItemType.ReleaseNote].Style"/>
+                    <RadzenIcon Icon="@(Data.TypeInfo[ItemType.ReleaseNote].Icon)" Style="@(Data.TypeInfo[ItemType.ReleaseNote].Style)" />
                 </div>
                 <div>
                     <div class="text-muted small">@item.DateCreated.ElapsedRelative(CurrentUser?.LocalTime ?? DateTime.Now)</div>

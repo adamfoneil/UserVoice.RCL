@@ -1,30 +1,27 @@
 ﻿@using UserVoice.RCL.Service.Queries;
 @inject UserVoiceDataContext Data
 
-<div class="d-flex flex-row-reverse">
-    <Pager @bind-Value="@query.Page" Change="@(() => Refresh(stateHasChanged: true))"/>
+<div class="d-flex flex-row-reverse my-3">
+    <Pager @bind-Value="@Query.Page" Change="@(() => Refresh(stateHasChanged: true))"/>
 </div>
 
-@foreach (var item in items)
+@foreach (var item in Items)
 {
-    <div class="row">
-        <div class="col-4">
-            <h4>@item.Title</h4>
-            <div class="mt-0">
-                <div class="text-muted small">@item.DateCreated.ToString("ddd M/d") | @item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
-            </div>
-        </div>
-        <div class="col-8">
-            @item.Body.ToMarkup()
-        </div>
-    </div>
+    @if (item.Template is TemplateType.ReleaseNote)
+    {
+        @ReleaseNoteDisplay(item)
+    }
+
+    @if (item.Template is TemplateType.Comment)
+    {
+        @CommentDisplay(item)
+    }
     <hr/>
 }
 
-
 @code {
-    AllReleaseNotes query = new() { Page = 0 };
-    IEnumerable<Item> items = Enumerable.Empty<Item>();
+    ReleaseNoteFeed Query = new() { Page = 0 };
+    IEnumerable<ReleaseNoteFeedResult> Items = Enumerable.Empty<ReleaseNoteFeedResult>();
 
     [Parameter]
     public DateTime? LocalTime { get; set; }
@@ -36,7 +33,38 @@
 
     async Task Refresh(bool stateHasChanged = false)
     {
-        items = await query.ExecuteAsync(Data.GetConnection);
+        Items = await Query.ExecuteAsync(Data.GetConnection);
         if (stateHasChanged) StateHasChanged();
     }
+
+    private RenderFragment<ReleaseNoteFeedResult> ReleaseNoteDisplay => item =>
+        @<div class="row">
+            <div class="col-4">
+                <h4>@item.Title</h4>
+                <div class="mt-0">
+                    <div class="text-muted small">@item.DateCreated.ToString("ddd M/d") | @item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
+                </div>
+            </div>
+            <div class="col-8">
+                @item.ItemBody.ToMarkup()
+            </div>
+        </div>;
+
+    private RenderFragment<ReleaseNoteFeedResult> CommentDisplay => item =>
+        @<div class="row">
+            <div class="col-4">
+                <h4>
+                    <RadzenIcon Icon="@(Data.TypeInfo[ItemType.ReleaseNote].Icon)" Style="@(Data.TypeInfo[ItemType.ReleaseNote].Style)" />
+                    <span>@item.Title</span>
+                </h4>
+                <div class="mt-0">
+                    <div class="text-muted small">@item.DateCreated.ToString("ddd M/d") | @item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
+                </div>
+            </div>
+            <div class="col-8">
+                <strong>@item.CreatedBy says:</strong> @item.CommentBody.ToMarkup()
+                <hr />
+                @item.ItemBody.ToMarkup()                
+            </div>
+        </div>;
 }
