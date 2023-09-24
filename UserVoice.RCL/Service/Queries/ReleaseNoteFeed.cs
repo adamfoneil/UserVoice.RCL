@@ -1,5 +1,6 @@
 ﻿using Dapper.QX;
 using Dapper.QX.Attributes;
+using UserVoice.Database;
 
 namespace UserVoice.RCL.Service.Queries;
 
@@ -13,7 +14,7 @@ public class ReleaseNoteFeedResult
 {
     public TemplateType Template { get; set; }
     public int Id { get; set; }
-    public int Type { get; set; }
+    public ItemType Type { get; set; }
     public string Title { get; set; } = default!;
     public string ItemBody { get; set; } = default!;
     public string CommentBody { get; set; } = default!;

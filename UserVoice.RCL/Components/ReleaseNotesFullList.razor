@@ -40,7 +40,10 @@
     private RenderFragment<ReleaseNoteFeedResult> ReleaseNoteDisplay => item =>
         @<div class="row">
             <div class="col-4">
-                <h4>@item.Title</h4>
+                <h4>
+                    <RadzenIcon Icon="@(Data.TypeInfo[item.Type].Icon)" Style="@(Data.TypeInfo[item.Type].Style)" />
+                    @item.Title
+                </h4>
                 <div class="mt-0">
                     <div class="text-muted small">@item.DateCreated.ToString("ddd M/d") | @item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
                 </div>
@@ -54,17 +57,21 @@
         @<div class="row">
             <div class="col-4">
                 <h4>
-                    <RadzenIcon Icon="@(Data.TypeInfo[ItemType.ReleaseNote].Icon)" Style="@(Data.TypeInfo[ItemType.ReleaseNote].Style)" />
+                    <RadzenIcon Icon="@(Data.TypeInfo[item.Type].Icon)" Style="@(Data.TypeInfo[item.Type].Style)" />
                     <span>@item.Title</span>
+                    <span class="text-muted ml-2 ms-2">#@item.Id</span>
                 </h4>
                 <div class="mt-0">
                     <div class="text-muted small">@item.DateCreated.ToString("ddd M/d") | @item.DateCreated.ElapsedRelative(LocalTime ?? DateTime.Now)</div>
                 </div>
             </div>
             <div class="col-8">
-                <strong>@item.CreatedBy says:</strong> @item.CommentBody.ToMarkup()
+                <details>
+                    <summary>Original Issue</summary>
+                    @item.ItemBody.ToMarkup()
+                </details>
                 <hr />
-                @item.ItemBody.ToMarkup()                
+                <strong>@item.CreatedBy says:</strong> @item.CommentBody.ToMarkup()                
             </div>
         </div>;
 }
