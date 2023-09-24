@@ -46,9 +46,12 @@
                     <details>
                         <summary>@comment.Title</summary>
                         <div class="mt-2">
-                            <strong>@comment.CreatedBy says:</strong> @comment.Body.ToMarkup()
-                            <hr/>
-                            @comment.ItemBody.ToMarkup()
+                            <details>
+                                <summary>Original Issue</summary>
+                                @comment.ItemBody.ToMarkup()
+                            </details>
+                            <hr />
+                            <strong>@comment.CreatedBy says:</strong> @comment.Body.ToMarkup()                                                       
                         </div>
                     </details>
                 </div>
