@@ -11,7 +11,7 @@
     <Copyright>Copyright (c) 2022 Adam O'Neil</Copyright>
     <PackageProjectUrl>https://github.com/adamfoneil/UserVoice.RCL</PackageProjectUrl>
     <Authors>Adam O'Neil</Authors>
-    <Version>1.1.11-alpha</Version>
+    <Version>1.1.12</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -45,7 +45,7 @@
 
   <ItemGroup>
     <PackageReference Include="AO.CopyObject" Version="1.0.1" />
-    <PackageReference Include="AO.Dapper.Repository.SqlServer" Version="1.4.1-alpha" />
+    <PackageReference Include="AO.Dapper.Repository.SqlServer" Version="1.4.1" />
     <PackageReference Include="AO.GitHubApi" Version="1.0.2" />
     <PackageReference Include="AO.Models" Version="1.1.48" />
     <PackageReference Include="Dapper.QX" Version="1.1.5" />
